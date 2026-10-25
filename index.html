@@ -1,0 +1,2571 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0c10"><meta name="application-name" content="Euph0r1n3"><meta name="apple-mobile-web-app-title" content="Euph0r1n3"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="site.webmanifest"><link rel="icon" type="image/x-icon" href="favicon.ico"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Euph0r1n3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: single dark landing page. Oversized wordmark hero, live install terminal, compatibility grid, changelog, FAQ. One loud accent (coral), everything else quiet. Buttons use a liquid-glass treatment: translucent layers, blur, a moving specular sheen. */
+:root {
+  --ink: #0a0c10;
+  --panel: #12161d;
+  --line: #232a35;
+  --text: #e8ecf2;
+  --mute: #8b95a5;
+  --bloom: #ff5a47;
+  --bloom-soft: #ff5a4722;
+  --mint: #9ff5d0;
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(#ffffff14 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(70rem 36rem at 50% -8%, #000 0%, transparent 70%);
+  pointer-events: none;
+}
+.wrap { max-width: 1040px; margin: 0 auto; transition: filter .3s ease; }
+.wrap.blurred { filter: blur(10px); pointer-events: none; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+
+/* parody banner */
+.banner {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--ink);
+  background: var(--mint);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 8px max(16px, env(safe-area-inset-left, 0px));
+  text-align: center;
+}
+
+nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 20px; flex-wrap: wrap; }
+.logo { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; }
+.logo i { width: 14px; height: 14px; background: var(--bloom); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: block; }
+.logo .ver { font-family: var(--font-mono); font-weight: 400; font-size: 11px; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; letter-spacing: .02em; }
+nav ul { list-style: none; display: flex; margin: 0; font-size: 14px; color: var(--mute); }
+nav a { text-decoration: none; }
+nav a:hover { color: var(--text); }
+
+.hero { padding-block: 56px 48px; animation: rise .6s ease both; }
+.tag { font-family: var(--font-mono); font-size: 12px; color: var(--mint); letter-spacing: .08em; text-transform: uppercase; display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+.tag b { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); animation: pulse 1.8s ease-in-out infinite; }
+h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(28px, 8.4vw, 112px); line-height: 1.05; letter-spacing: -.045em; margin: 24px 0 20px; white-space: nowrap; }
+h1 span { color: var(--bloom); display: inline; vertical-align: baseline; }
+.lede { max-width: 54ch; color: var(--mute); font-size: 18px; margin: 0 0 32px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+button, .btn { font: inherit; cursor: pointer; }
+
+/* liquid glass buttons: dark translucent pills, strong blur, bright rim light on opposite corners */
+.go, .ghost {
+  position: relative; isolation: isolate; overflow: hidden;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  padding: 15px 30px; border-radius: 999px; border: 0;
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  transition: transform .3s cubic-bezier(.2,.9,.3,1.25), box-shadow .3s ease, background .3s ease;
+}
+.go::before, .ghost::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.2px; z-index: 1; pointer-events: none;
+  background: linear-gradient(135deg, #ffffffd9 0%, #ffffff00 38%, #ffffff00 62%, #ffffff8c 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.go::after, .ghost::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 0; pointer-events: none;
+  background: radial-gradient(120% 90% at 20% 0%, #ffffff30, #ffffff00 55%);
+  transition: opacity .3s ease;
+}
+.go {
+  color: #fff; text-shadow: 0 1px 8px #6a140a88;
+  background: linear-gradient(180deg, #ff6b55b8, #ff4633a6);
+  box-shadow: inset 0 1px 1px #ffffff66, inset 0 -2px 6px #ff9a8c40, inset 0 0 22px #ffffff14, 0 14px 34px -12px #ff5a47b0, 0 2px 8px #0008;
+}
+.go:hover { transform: translateY(-2px) scale(1.025); background: linear-gradient(180deg, #ff7a66c8, #ff5440b6); box-shadow: inset 0 1px 1px #ffffff80, inset 0 -2px 6px #ff9a8c55, inset 0 0 26px #ffffff1c, 0 18px 40px -12px #ff5a47d0, 0 2px 8px #0008; }
+.go:active { transform: translateY(0) scale(.97); }
+.go:disabled { opacity: .65; cursor: progress; transform: none; }
+.go span.label { position: relative; z-index: 2; }
+
+.ghost {
+  color: var(--text); text-decoration: none; display: inline-block;
+  background: #ffffff12;
+  box-shadow: inset 0 1px 1px #ffffff40, inset 0 -1px 2px #ffffff14, inset 0 0 18px #ffffff0d, 0 10px 28px -12px #000d;
+}
+.ghost:hover { transform: translateY(-2px) scale(1.025); background: #ffffff1f; box-shadow: inset 0 1px 1px #ffffff59, inset 0 -1px 2px #ffffff1f, inset 0 0 22px #ffffff14, 0 14px 32px -12px #000d; }
+.ghost:active { transform: translateY(0) scale(.97); }
+
+/* soft color behind the buttons so the glass has something to blur */
+.hero { position: relative; isolation: isolate; }
+.hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(48px); pointer-events: none; }
+.hero::before { width: 240px; height: 240px; left: 2%; top: 250px; background: #ff5a4766; animation: drift 9s ease-in-out infinite alternate; }
+.hero::after { width: 200px; height: 200px; left: 24%; top: 290px; background: #9ff5d044; animation: drift 11s ease-in-out infinite alternate-reverse; }
+@keyframes drift { from { transform: translate(0,0); } to { transform: translate(60px,-18px); } }
+
+/* nav links as a glass pill */
+nav ul { padding: 6px 8px; gap: 2px; border-radius: 999px; background: #ffffff0f; -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%); box-shadow: inset 0 1px 1px #ffffff33, inset 0 0 16px #ffffff0a, 0 8px 24px -12px #000d; border: 1px solid #ffffff1c; }
+nav li a { display: block; padding: 6px 14px; border-radius: 999px; transition: background .25s ease, color .25s ease; }
+nav li a:hover { background: #ffffff1c; color: var(--text); }
+
+.meta { font-family: var(--font-mono); font-size: 12px; color: var(--mute); margin-top: 16px; font-variant-numeric: tabular-nums; }
+
+/* terminal */
+.term { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; margin-top: 40px; overflow: hidden; animation: rise .6s ease both .1s; }
+.term-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 12px; color: var(--mute); }
+.term-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: block; }
+.term-bar span { margin-left: auto; }
+.log { font-family: var(--font-mono); font-size: 13px; line-height: 1.7; padding: 16px; min-height: 190px; max-height: 280px; overflow-y: auto; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--text); }
+.log div { animation: linein .25s ease both; }
+.log .ok { color: var(--mint); }
+.log .hot { color: var(--bloom); }
+.log .dim { color: var(--mute); }
+.dotapple { display: flex; justify-content: center; padding: 14px 0 6px; }
+.dotapple canvas { display: block; max-width: 100%; }
+.bar { height: 4px; background: var(--line); overflow: hidden; }
+.bar div { height: 100%; width: 0; background: linear-gradient(90deg, var(--bloom), var(--mint)); transition: width .3s linear; position: relative; }
+.bar div::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, #ffffff8c 50%, transparent 70%); background-size: 200% 100%; animation: shimmer 1.6s linear infinite; }
+
+section { padding-block: 56px; border-top: 1px solid var(--line); }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 5vw, 40px); letter-spacing: -.03em; line-height: 1.05; margin: 0 0 8px; text-wrap: balance; }
+.sub { color: var(--mute); margin: 0 0 32px; max-width: 56ch; }
+
+.feat { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.feat article { padding: 28px; min-width: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background .2s ease; }
+.feat article:hover { background: #ffffff06; }
+.feat article:nth-child(2n) { border-right: 0; }
+.feat article:nth-last-child(-n+2) { border-bottom: 0; }
+.feat h3 { font-family: var(--font-display); font-size: 16px; margin: 0 0 8px; letter-spacing: -.01em; }
+.feat p { margin: 0; color: var(--mute); font-size: 15px; }
+.feat .big { font-family: var(--font-mono); font-size: 11px; color: var(--bloom); display: block; margin-bottom: 14px; letter-spacing: .08em; text-transform: uppercase; }
+@media (max-width: 560px) {
+  .feat { grid-template-columns: 1fr; }
+  .feat article { border-right: 0; }
+  .feat article:last-child { border-bottom: 0; }
+}
+
+.compat { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 520px; }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.compat th, .compat td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.compat th { font-family: var(--font-mono); font-size: 11px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.compat tr:last-child td { border-bottom: 0; }
+.pill { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border-radius: 999px; border: 1px solid; }
+.pill.y { color: var(--mint); border-color: #9ff5d044; }
+.pill.m { color: var(--bloom); border-color: #ff5a4755; }
+
+.term-link { all: unset; border-bottom: 1px dotted currentColor; cursor: help; font: inherit; color: inherit; }
+.term-link:hover { border-bottom-color: var(--text); }
+#glossary { position: fixed; z-index: 98; max-width: 260px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: 0 20px 48px -16px #000c; font-size: 13.5px; color: var(--text); animation: pop .15s ease both; }
+#glossary b { display: block; font-family: var(--font-display); font-size: 13px; margin-bottom: 4px; }
+
+.log2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.log2 li { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.log2 time { font-family: var(--font-mono); font-size: 13px; color: var(--bloom); }
+.log2 p { margin: 0; min-width: 0; }
+.log2 strong { display: block; margin-bottom: 2px; }
+.log2 span { color: var(--mute); font-size: 15px; }
+
+details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::after { content: "+"; font-family: var(--font-mono); color: var(--bloom); transition: transform .2s ease; }
+details[open] summary::after { content: "+"; transform: rotate(45deg); }
+details p { color: var(--mute); margin: 10px 0 0; max-width: 62ch; }
+
+footer { border-top: 1px solid var(--line); padding-block: 40px calc(120px + env(safe-area-inset-bottom, 0px)); color: var(--mute); font-size: 13px; display: grid; gap: 8px; }
+footer b { color: var(--text); }
+
+#boot { position: fixed; inset: 0; z-index: 100; background: #000; display: grid; place-items: center; cursor: pointer; }
+#boot .mark { width: 104px; height: 104px; animation: fadein 1.2s ease both; }
+#boot .cap { position: absolute; left: 0; right: 0; bottom: max(24px, env(safe-area-inset-bottom, 0px)); text-align: center; font-family: var(--font-mono); font-size: 11px; color: #4a525e; letter-spacing: .04em; padding-inline: 16px; }
+#boot .track { position: absolute; left: 50%; top: calc(50% + 92px); width: min(180px, 52vw); height: 4px; border-radius: 4px; background: #2a2f38; transform: translateX(-50%); overflow: hidden; }
+#boot .fill { height: 100%; width: 0; background: #e8ecf2; border-radius: 4px; }
+
+#welcome { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; }
+#welcome .scrim { position: absolute; inset: 0; background: #05060888; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+#welcome .card { position: relative; width: min(360px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 32px 28px; text-align: center; box-shadow: 0 30px 80px -20px #000a; animation: pop .25s ease both; }
+#welcome h2 { font-size: 22px; margin: 0 0 6px; }
+#welcome p.sub2 { color: var(--mute); font-size: 14px; margin: 0 0 24px; }
+#welcome label { display: block; text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); margin: 0 0 6px; }
+#welcome input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--text); border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 15px; margin-bottom: 16px; }
+#welcome input:focus-visible { outline: 2px solid var(--mint); outline-offset: 1px; }
+#welcome .go2 { width: 100%; margin-top: 4px; display: flex; align-items: center; justify-content: center; }
+#welcome .skip { display: block; margin-top: 14px; color: var(--mute); font-size: 13px; background: none; border: 0; text-decoration: underline; }
+
+#toast { position: fixed; top: calc(18px + env(safe-area-inset-top, 0px)); left: 50%; transform: translate(-50%, -12px); z-index: 95; background: var(--panel); border: 1px solid var(--line); color: var(--text); font-weight: 700; padding: 12px 20px; border-radius: 999px; opacity: 0; transition: opacity .3s ease, transform .3s ease; }
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+/* bottom glass dock: heavy blur, rim light, and a liquid capsule that slides between tabs */
+.dock {
+  position: fixed; z-index: 80; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  width: min(520px, calc(100vw - 24px));
+  display: flex; flex-wrap: nowrap; align-items: stretch; justify-content: stretch; gap: 0; padding: 6px; border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff1f 0%, #ffffff08 45%, #ffffff12 100%);
+  -webkit-backdrop-filter: blur(34px) saturate(220%) brightness(1.08); backdrop-filter: blur(34px) saturate(220%) brightness(1.08);
+  box-shadow: inset 0 1.5px 1px #ffffff59, inset 0 -1.5px 2px #ffffff26, inset 0 0 26px #ffffff12, 0 22px 50px -14px #000, 0 3px 12px #000a;
+  transform: translateX(-50%); animation: dockin .8s cubic-bezier(.2,.9,.3,1.25) .4s both;
+}
+.dock::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.3px; pointer-events: none; z-index: 3;
+  background: linear-gradient(135deg, #ffffffe6 0%, #ffffff00 30%, #ffffff00 70%, #ffffff99 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.dock::after {
+  content: ""; position: absolute; left: 8%; right: 8%; top: 2px; height: 42%; border-radius: 999px; pointer-events: none; z-index: 0;
+  background: linear-gradient(180deg, #ffffff38, #ffffff00);
+}
+.dock .pill { position: absolute; top: 6px; bottom: 6px; left: 0; width: 0; z-index: 1; pointer-events: none; transition: transform .55s cubic-bezier(.3,1.35,.45,1), width .55s cubic-bezier(.3,1.35,.45,1); }
+.dock .pill.still { transition: none; }
+.dock .pill i {
+  display: block; width: 100%; height: 100%; border-radius: 999px;
+  background: linear-gradient(180deg, #ffffff38, #ffffff1a 55%, #ffffff2b);
+  box-shadow: inset 0 1.5px 1px #ffffff80, inset 0 -1.5px 3px #ffffff40, inset 0 0 18px #ffffff1f, 0 6px 18px -6px #000b, 0 0 22px -4px #ff5a4755;
+  -webkit-backdrop-filter: blur(10px) saturate(180%); backdrop-filter: blur(10px) saturate(180%);
+}
+.dock .pill.moving i { animation: squish .55s cubic-bezier(.3,1.35,.45,1); }
+.dock button {
+  all: unset; box-sizing: border-box; cursor: pointer; flex: 1; min-width: 0; position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 8px 4px 7px; border-radius: 999px; color: #c4ccd8;
+  font-family: var(--font-body); font-weight: 700; font-size: 10px; letter-spacing: .01em;
+  transition: color .3s ease, transform .3s cubic-bezier(.2,.9,.3,1.3);
+}
+.dock button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s cubic-bezier(.3,1.5,.5,1); }
+.dock button:hover { color: #fff; }
+.dock button:active { transform: scale(.93); }
+.dock button:focus-visible { outline: 2px solid var(--mint); outline-offset: -2px; }
+.dock button[aria-current="true"] { color: var(--bloom); }
+.dock button[aria-current="true"] svg { transform: translateY(-1px) scale(1.08); }
+@keyframes dockin { from { opacity: 0; transform: translate(-50%, 24px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes squish { 0% { transform: scale(1,1); } 30% { transform: scale(1.14,.9); } 65% { transform: scale(.97,1.05); } 100% { transform: scale(1,1); } }
+@media (prefers-reduced-motion: reduce) { .dock, .dock .pill.moving i { animation: none; } .dock .pill { transition: none; } }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes linein { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -40% 0; } }
+@keyframes pop { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+.pick { cursor: pointer; }
+.pick:hover td { background: #ffffff08; }
+.pick:focus-visible { outline-offset: -3px; }
+.pick.on td { background: var(--bloom-soft); }
+.pick.on td:first-child::after { content: "  · instant mode"; color: var(--bloom); font-family: var(--font-mono); font-size: 11px; }
+@keyframes pulse { 50% { opacity: .3; } }
+@media (max-width: 560px) {
+  .log2 li { grid-template-columns: 1fr; gap: 4px; }
+  nav ul { font-size: 13px; }
+  nav li a { padding: 6px 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tag b { animation: none; }
+  .go, .bar div, .hero, .term, .log div, #glossary, #welcome .card { transition: none; animation: none; }
+  .hero::before, .hero::after { animation: none; }
+}
+</style>
+
+<div class="wrap blurred">
+  <nav>
+    <div class="logo"><i></i>EUPH0R1N3<span class="ver">v2.0</span></div>
+    <ul>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#devices">Devices</a></li>
+      <li><a href="#tweaks">Tweaks</a></li>
+      <li><a href="#changes">Changelog</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <span class="tag"><b></b> <button class="term-link" type="button" data-term="rootless" style="font-family:inherit;font-size:inherit;">rootless</button></span>
+    <h1>Euph0<span>r1n3</span></h1>
+    <p class="lede">A fast, rootless jailbreak with a built-in package manager. One tap, about a minute, and you are done.</p>
+    <div class="cta">
+      <button class="go" id="go" type="button"><span class="label">Jailbreak</span></button>
+      <a class="ghost" href="#devices">Check my device</a>
+    </div>
+    <div class="meta">Version 2.0 · Build 4117 · <button class="term-link" type="button" data-term="rootless" style="font-family:inherit;font-size:inherit;">Rootless</button></div>
+    <div class="meta" id="dev" style="color: var(--mint);">Detecting your device…</div>
+
+    <div class="term" id="install">
+      <div class="term-bar"><i></i><i></i><i></i><span id="status">idle</span></div>
+      <pre class="log" id="log" aria-live="polite"><span class="dim">$ ready. press Jailbreak to begin</span></pre>
+      <div class="bar"><div id="prog"></div></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Built for people who love a good progress bar</h2>
+    <p class="sub">Everything you need after the jailbreak finishes.</p>
+    <div class="feat">
+      <article><span class="big">Kernel</span><h3>PAC-Man bypass</h3><p>Lets the little yellow circle eat pointer authentication codes. Works in the arcade only.</p></article>
+      <article><span class="big">Rootless</span><h3>Roots, but less</h3><p>Installs nothing into a folder that does not exist, so nothing can ever break.</p></article>
+      <article><span class="big">Tweaks</span><h3>Euph Store</h3><p>A package manager with 4,096 tweaks, each of which turns the status bar slightly greener in your imagination.</p></article>
+      <article><span class="big">Stability</span><h3>Reboot-proof</h3><p>Survives reboots by never starting in the first place. Uptime: perfect.</p></article>
+    </div>
+  </section>
+
+  <section id="devices">
+    <h2>Supported devices</h2>
+    <p class="sub">Check your device against the list below.</p>
+    <div class="scroll">
+      <table class="compat">
+        <thead><tr><th>Device</th><th>Version range</th><th>Method</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr id="row15" class="pick" tabindex="0" role="button" aria-pressed="false"><td>iPhone 15</td><td>iOS 26.3 beta</td><td><button class="term-link" type="button" data-term="rootless">Rootless</button></td><td><span class="pill y">Supported</span></td></tr>
+          <tr><td>iPhone 16 Pro</td><td>iOS 26.0 – 26.2</td><td><button class="term-link" type="button" data-term="rootless">Rootless</button></td><td><span class="pill y">Supported</span></td></tr>
+          <tr><td>iPhone 15 Pro Max</td><td>iOS 26.0 – 26.3 beta</td><td><button class="term-link" type="button" data-term="rootless">Rootless</button></td><td><span class="pill y">Supported</span></td></tr>
+          <tr><td>iPhone 14</td><td>iOS 18.0 – 26.1</td><td><button class="term-link" type="button" data-term="rootless">Rootless</button></td><td><span class="pill y">Supported</span></td></tr>
+          <tr><td>iPhone 13</td><td>iOS 17.0 – 18.x</td><td><button class="term-link" type="button" data-term="rootful">Rootful</button></td><td><span class="pill y">Supported</span></td></tr>
+          <tr><td>iPhone 12</td><td>iOS 16.0 – 17.x</td><td><button class="term-link" type="button" data-term="rootful">Rootful</button></td><td><span class="pill m">Beta</span></td></tr>
+          <tr><td>iPhone 11</td><td>iOS 15.0 – 16.x</td><td><button class="term-link" type="button" data-term="rootful">Rootful</button></td><td><span class="pill m">Beta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="meta" id="hint">Tip: tap the iPhone 15 row to turn on instant mode, then press Jailbreak.</p>
+  </section>
+
+
+<style>
+/* Tweaks folder: empty until a jailbreak succeeds, then Euph Store + user .ipa apps */
+.tweak-folder { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 22px; min-height: 196px; transition: border-color .2s ease, background .2s ease; }
+.tweak-folder.drag { border-color: var(--bloom); background: #171c25; }
+.appgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 14px; }
+.app { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px; padding: 18px 10px 14px; border: 1px solid var(--line); border-radius: 18px; background: #ffffff06; min-width: 0; animation: pop .3s ease both; font-family: var(--font-body); color: var(--text); }
+.appicon { width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 20px; color: #fff; text-shadow: 0 1px 8px #00000055; box-shadow: inset 0 1px 1px #ffffff55, inset 0 -2px 6px #00000030, 0 10px 22px -10px #000c; flex: none; }
+.appicon.store { background: linear-gradient(160deg, #ff7a66, #ff4633 60%, #d92c1a); }
+.appicon.user { background: linear-gradient(160deg, hsl(var(--hue, 210) 70% 52%), hsl(calc(var(--hue, 210) + 40) 70% 36%)); }
+.appname { font-weight: 700; font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+.appmeta { font-family: var(--font-mono); font-size: 11px; color: var(--mute); overflow-wrap: anywhere; }
+.store-app { cursor: pointer; }
+.appdel { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: #00000066; color: var(--mute); cursor: pointer; font-size: 15px; line-height: 1; display: grid; place-items: center; }
+.appdel:hover { color: #fff; border-color: var(--bloom); }
+.addtile { cursor: pointer; border-style: dashed; background: transparent; width: 100%; }
+.addtile:hover { border-color: var(--bloom); color: #fff; }
+.addtile .plus { width: 58px; height: 58px; border-radius: 16px; border: 1.5px dashed #ffffff45; display: grid; place-items: center; font-size: 28px; font-weight: 400; color: var(--mute); flex: none; }
+.addtile:hover .plus { color: var(--bloom); border-color: var(--bloom); }
+.tweakhint { color: var(--mute); font-size: 14px; margin: 18px 0 0; }
+.tweakhint b { color: var(--text); }
+.tweakmsg { font-size: 14px; font-weight: 700; margin: 12px 0 0; }
+.tweakmsg.err { color: #ff8a7a; }
+.tweakmsg.ok { color: var(--mint); }
+.tweakreset { margin-top: 14px; background: none; border: 0; padding: 0; color: var(--mute); text-decoration: underline; cursor: pointer; font: inherit; font-size: 13px; }
+.tweakreset:hover { color: var(--text); }
+.appicon { position: relative; overflow: hidden; }
+.appicon .appimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+.appicon.store { background: transparent; box-shadow: 0 10px 22px -10px #000c; text-shadow: none; }
+.appicon.store svg { width: 100%; height: 100%; display: block; }
+.appicon.web { background: linear-gradient(160deg, hsl(var(--hue, 210) 45% 34%), hsl(calc(var(--hue, 210) + 30) 50% 20%)); }
+.webclip-app { cursor: pointer; }
+.needs-icon { cursor: pointer; }
+.needs-icon .appmeta { color: var(--mint); }
+.needs-icon:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+.launchable { cursor: pointer; }
+.launchable:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+#applaunch { position: fixed; inset: 0; z-index: 96; display: grid; place-items: center; padding: 18px; }
+#applaunch[hidden] { display: none !important; }
+#applaunch .launchscrim { position: absolute; inset: 0; background: #050608a8; backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%); }
+#applaunch .launchcard { position: relative; width: min(390px, 100%); max-height: calc(100dvh - 36px); overflow-y: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 30px 26px 24px; text-align: center; box-shadow: 0 30px 90px -20px #000c; animation: pop .25s ease both; }
+#applaunch .launchclose { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: #ffffff10; color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+#applaunch .launchclose:hover { background: #ffffff22; }
+#applaunch .launchicon { display: grid; place-items: center; margin: 4px auto 14px; }
+#applaunch .launchicon .appicon { width: 92px; height: 92px; border-radius: 24px; font-size: 34px; }
+#applaunch h3 { font-family: var(--font-display); font-size: 21px; letter-spacing: -.02em; margin: 0 0 6px; overflow-wrap: anywhere; }
+#applaunch .launchmeta, #applaunch .launchdetails { font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; color: var(--mute); overflow-wrap: anywhere; margin: 0; }
+#applaunch .launchdetails { white-space: pre-line; margin-top: 12px; text-align: left; background: #ffffff06; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+#applaunch .launchbar { height: 5px; background: #ffffff14; border-radius: 999px; overflow: hidden; margin: 18px 0 12px; }
+#applaunch .launchbar i { display: block; height: 100%; width: 0; background: var(--mint); border-radius: inherit; transition: width .45s ease; }
+#applaunchstatus { color: var(--text); font-size: 14px; line-height: 1.55; margin: 0; min-height: 44px; }
+#applaunch .launchactions { display: grid; gap: 10px; margin-top: 16px; }
+#applaunch .launchbtn { appearance: none; -webkit-appearance: none; display: block; width: 100%; box-sizing: border-box; cursor: pointer; color: var(--text); font: inherit; font-weight: 700; font-size: 15px; padding: 12px 16px; border-radius: 999px; background: #ffffff10; border: 1px solid var(--line); text-align: center; text-decoration: none; }
+#applaunch .launchbtn:hover { background: #ffffff1e; }
+#applaunch .launchbtn.launchprimary { color: #fff; border: 0; background: linear-gradient(180deg, #ff6b55, #ff4633); box-shadow: inset 0 1px 1px #ffffff55, 0 12px 26px -12px #ff5a47; }
+#applaunch .launchbtn.launchprimary:hover { filter: brightness(1.07); background: linear-gradient(180deg, #ff6b55, #ff4633); }
+#applaunch .launchnote { color: var(--mute); font-size: 12.5px; line-height: 1.55; margin: 14px 0 0; }
+#applaunch .launchbtn.is-disabled { opacity: .45; }
+#applaunch .otapanel { text-align: left; background: #0d1117; border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 10px; }
+#applaunch .otapanel[hidden] { display: none !important; }
+#applaunch .otapanel p { color: var(--mute); font-size: 13px; line-height: 1.55; margin: 0; }
+#applaunch .otapanel p strong { color: var(--text); }
+#applaunch .otapanel ol { color: var(--mute); font-size: 13px; line-height: 1.55; margin: 0; padding-left: 20px; }
+#applaunch .otapanel label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; }
+#applaunch .otapanel input { width: 100%; box-sizing: border-box; background: #05070a; border: 1px solid var(--line); border-radius: 11px; color: var(--text); padding: 11px 12px; font: inherit; font-size: 13px; font-weight: 400; }
+#applaunch .otapanel input:focus { outline: 2px solid var(--mint); outline-offset: 2px; border-color: transparent; }
+#applaunch .otaerror { color: #ff8a7a !important; font-weight: 700; min-height: 18px; }
+#applaunch .otaerror:empty { display: none; }
+#applaunch .owncert { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; }
+#applaunch .owncert input[type="file"] { padding: 9px; }
+#owncertstatus { white-space: pre-line; background: #ffffff06; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+#webclipview { position: fixed; inset: 0; z-index: 97; display: grid; padding: 12px; background: #050608b8; backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%); }
+#webclipview[hidden] { display: none !important; }
+#webclipview .webclipwindow { display: flex; flex-direction: column; min-height: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 30px 90px -20px #000c; animation: pop .25s ease both; }
+#webclipview .webclipbar { display: flex; align-items: center; gap: 8px; padding: 10px; background: #ffffff08; border-bottom: 1px solid var(--line); flex: none; }
+#webclipview .webclipbtn { appearance: none; -webkit-appearance: none; box-sizing: border-box; min-height: 38px; padding: 8px 11px; border-radius: 999px; border: 1px solid var(--line); background: #ffffff10; color: var(--text); font: inherit; font-size: 13px; font-weight: 700; line-height: 1; cursor: pointer; text-decoration: none; display: inline-grid; place-items: center; flex: none; }
+#webclipview .webclipbtn:hover { background: #ffffff20; }
+#webclipview .webclipbtn.iconbtn { width: 38px; padding-inline: 0; font-size: 18px; }
+#webclipview .webclipheading { flex: 1; min-width: 0; display: flex; align-items: center; gap: 9px; }
+#webclipview .webclipheading .appicon { width: 36px; height: 36px; border-radius: 10px; font-size: 14px; }
+#webclipview .webclipheadingtext { min-width: 0; text-align: left; }
+#webclipview .webclipheadingtext strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 15px; }
+#webclipview .webclipheadingtext > span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-mono); font-size: 11px; color: var(--mute); }
+#webclipview .webclipstatus { flex: none; padding: 8px 12px; background: #0d1117; border-bottom: 1px solid var(--line); color: var(--mute); font-size: 12.5px; line-height: 1.45; }
+#webclipview .webclipstatus a { color: var(--mint); font-weight: 700; white-space: nowrap; }
+#webclipframe { flex: 1 1 auto; width: 100%; min-height: 0; border: 0; background: #fff; }
+#webclipframe[hidden] { display: none !important; }
+#webclipview .webclipdownload { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: grid; place-items: center; padding: 28px; text-align: center; }
+#webclipview .webclipdownload[hidden] { display: none !important; }
+#webclipview .webclipdownloadinner { width: min(360px, 100%); }
+#webclipview .webclipdownloadicon { display: grid; place-items: center; margin-bottom: 14px; }
+#webclipview .webclipdownloadicon .appicon { width: 84px; height: 84px; border-radius: 22px; font-size: 30px; }
+#webclipview .webclipdownload h3 { font-family: var(--font-display); font-size: 20px; margin: 0 0 8px; overflow-wrap: anywhere; }
+#webclipview .webclipdownload p { color: var(--mute); font-size: 14px; line-height: 1.55; margin: 0; overflow-wrap: anywhere; }
+#webclipview .webclipdownloadactions { display: grid; gap: 10px; margin-top: 18px; }
+#webclipview .clipaction { display: block; box-sizing: border-box; width: 100%; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--line); background: #ffffff10; color: var(--text); font-weight: 700; font-size: 15px; text-decoration: none; }
+#webclipview .clipaction:hover { background: #ffffff1e; }
+#webclipview .clipaction.primary { border: 0; color: #fff; background: linear-gradient(180deg, #ff6b55, #ff4633); box-shadow: inset 0 1px 1px #ffffff55, 0 10px 24px -12px #ff5a47; }
+@media (max-width: 560px) {
+  #webclipview { padding: 0; }
+  #webclipview .webclipwindow { border: 0; border-radius: 0; }
+  #webclipview .webclipbar { padding-top: calc(10px + env(safe-area-inset-top, 0px)); }
+}
+.webclip-app:focus-visible, .store-app:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+.addtile:disabled { opacity: .55; cursor: progress; }
+.addtile .plus svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.webclipform { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 18px; display: grid; gap: 12px; }
+.webclipform label { display: grid; gap: 6px; font-weight: 700; font-size: 14px; text-align: left; }
+.webclipform label span { color: var(--mute); font-weight: 400; font-size: 13px; }
+.webclipform input { width: 100%; background: #0d1117; border: 1px solid var(--line); border-radius: 12px; color: var(--text); padding: 12px 14px; font: inherit; font-weight: 400; }
+.webclipform input:focus { outline: 2px solid var(--mint); outline-offset: 2px; border-color: transparent; }
+.webclipactions { display: flex; gap: 10px; flex-wrap: wrap; }
+.webclipadd { border: 0; cursor: pointer; color: #fff; font: inherit; font-weight: 700; padding: 11px 18px; border-radius: 999px; background: linear-gradient(180deg, #ff6b55, #ff4633); box-shadow: inset 0 1px 1px #ffffff55, 0 12px 26px -12px #ff5a47; }
+.webclipadd:hover { filter: brightness(1.07); }
+.webclipcancel { cursor: pointer; color: var(--text); font: inherit; font-weight: 700; padding: 11px 18px; border-radius: 999px; background: #ffffff10; border: 1px solid var(--line); }
+.webclipcancel:hover { background: #ffffff1c; }
+@media (max-width: 560px) {
+  nav ul { flex-wrap: wrap; justify-content: center; border-radius: 26px; }
+  .tweak-folder { padding: 16px; }
+  .appgrid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+}
+</style>
+
+  <section id="tweaks">
+    <h2>Tweaks</h2>
+    <p class="sub" id="tweakssub" hidden>Euph Store, your .ipa apps and your webclips live here. (Launcher v7)</p>
+    <div class="tweak-folder" id="tweakfolder">
+      <div class="appgrid" id="appgrid"></div>
+      <p class="tweakhint" id="tweakhint" hidden>Tap <b>Add app</b> and choose a <b>.ipa</b> file — its real name and app icon are pulled from inside the file and it appears here, right next to Euph Store. Or tap <b>Add webclip</b> and paste a link (web apps and .mobileconfig webclip links work too). You can also drag &amp; drop .ipa files or links into this folder. Tap an app to try opening the copy installed on this iPhone (that part works offline). A web page can't run a native .ipa by itself — if no installed copy or open-in-app link is found, the launch screen offers share/save options instead. If an app still shows letters, its launch screen has a button to load its icon.</p>
+            <p class="tweakmsg" id="tweakmsg" role="alert" hidden></p>
+      <form class="webclipform" id="webclipform" hidden>
+        <label for="webclipurl">Webclip link
+          <input id="webclipurl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/app">
+          <span>Paste a website or web-app link — its site icon will be used when one is available.</span>
+        </label>
+        <label for="webclipname">Name <span>(optional — defaults to the website name)</span>
+          <input id="webclipname" type="text" placeholder="My webclip">
+        </label>
+        <div class="webclipactions">
+          <button class="webclipadd" type="submit">Add webclip</button>
+          <button class="webclipcancel" id="webclipcancel" type="button">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <input id="ipafile" type="file" accept=".ipa" multiple hidden>
+    <button class="tweakreset" id="tweakreset" type="button" hidden>Restore rootFS — remove jailbreak &amp; clear Tweaks</button>
+  </section>
+
+  <section id="changes">
+    <h2>Changelog</h2>
+    <p class="sub">Eight releases in, still zero bytes shipped.</p>
+    <ul class="log2">
+      <li><time>v2.0</time><p><strong>Engine rewrite</strong><span>Rewrote the nothing in a faster language. It now does nothing 40% quicker.</span></p></li>
+      <li><time>v1.4</time><p><strong>Dark mode for the dark mode</strong><span>The page is darker. Your phone is unchanged.</span></p></li>
+      <li><time>v1.2</time><p><strong>Smoother install</strong><span>Cleaner progress readout and fewer retries.</span></p></li>
+      <li><time>v1.0</time><p><strong>Initial joke</strong><span>Hello, world. Goodbye, expectations.</span></p></li>
+    </ul>
+  </section>
+
+  <section id="faq">
+    <h2>FAQ</h2>
+    <p class="sub">Questions nobody has asked yet.</p>
+    <details><summary>Is this a real jailbreak?</summary><p>No. It is a parody landing page built for fun. It has no download, no exploit, and no connection to any real project.</p></details>
+    <details><summary>Will it void my warranty?</summary><p>You cannot void a warranty with a web page. Tap away.</p></details>
+    <details><summary>Will Euph0r1n3 find me a P12 certificate online?</summary><p>No. Public P12 files are other people’s private signing identities — normally leaked, shared without permission, or revoked — so this page will never search for, download, or use them. The “Use my own certificate” section only checks files you select, locally in this tab, and never uploads or saves them.</p></details>
+    <details><summary>Where do I get the IPA?</summary><p>There is no IPA. If another site offers a file with this name, do not install it.</p></details>
+    <details><summary>Can this page run the .ipa files I add?</summary><p>No web page can execute a native iPhone app. Tapping an app in Tweaks tries to open the copy already installed on the iPhone using open-in-app links read from inside the .ipa. The launch screen can share/save the file you picked in this session. Its signed OTA option can ask iOS to install a copy only when that copy is already signed for the device and hosted, together with a manifest, over HTTPS; a local unsigned file cannot be installed by the browser.</p></details>
+    <details><summary>Why does a webclip stay blank inside Tweaks?</summary><p>Some websites refuse to be shown inside another page, and secure (https) copies of this page may block http webclips inside the window. Use the ↗ button or “Open in this tab” on the webclip screen. Profile (.mobileconfig) and other download links get an Open link screen instead of a blank page.</p></details>
+    <details><summary>Can I use this layout for my own project?</summary><p>Ask for a remix. It is a template for jokes, school projects, or portfolio pieces.</p></details>
+  </section>
+
+  <footer id="bottom">
+    <div><b>Euph0r1n3 v2.0</b> is a made-up name and a made-up project, created as a parody.</div>
+    <div>No real software, tool or team is represented. Nothing here is affiliated with any device maker or jailbreak project.</div>
+  </footer>
+</div>
+
+<nav class="dock" aria-label="Jump to section">
+  <span class="pill still" aria-hidden="true"><i></i></span>
+  <button type="button" data-go="top" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>Start</button>
+  <button type="button" data-go="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Devices</button>
+  <button type="button" data-go="tweaks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2.2"/><circle cx="15" cy="12" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>Tweaks</button>
+  <button type="button" data-go="changes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>Changelog</button>
+  <button type="button" data-go="faq"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 114 2c-.9.6-1.6 1-1.6 2"/><path d="M12 16.8h.01"/></svg>FAQ</button>
+</nav>
+
+<div id="toast" hidden></div>
+
+<div id="glossary" hidden role="tooltip"></div>
+<div id="applaunch" hidden role="dialog" aria-modal="true" aria-labelledby="applaunchname">
+  <div class="launchscrim"></div>
+  <div class="launchcard">
+    <button class="launchclose" id="applaunchclose" type="button" aria-label="Close">×</button>
+    <div class="launchicon" id="applaunchicon"></div>
+    <h3 id="applaunchname">App</h3>
+    <p class="launchmeta" id="applaunchmeta"></p>
+    <div class="launchbar" aria-hidden="true"><i id="applaunchfill"></i></div>
+    <p id="applaunchstatus" role="status">Opening…</p>
+    <p class="launchdetails" id="applaunchdetails"></p>
+    <div class="launchactions">
+      <button class="launchbtn launchprimary" id="applaunchopen" type="button">Open installed app</button>
+      <button class="launchbtn" id="applaunchshare" type="button">Share / save .ipa</button>
+      <button class="launchbtn" id="applaunchinstall" type="button">Install to Home Screen…</button>
+      <form class="otapanel" id="otainstallform" hidden>
+        <p><strong>Signed OTA install.</strong> This is the only way a web page can ask iOS to put an app on the Home Screen. It works only when the exact app is already signed for this iPhone and both files below are hosted at HTTPS addresses. A file picked from the Files app cannot be installed by the browser, and unsigned or decrypted IPAs will be rejected by iOS.</p>
+        <ol>
+          <li>Put the signed .ipa on an HTTPS host and paste its link here, then tap <b>Download manifest.plist</b>.</li>
+          <li>Upload that manifest.plist to the same HTTPS host and paste its link here.</li>
+          <li>Tap <b>Install signed app</b>. iOS — not this page — checks the signature, downloads the app and creates the Home Screen icon.</li>
+        </ol>
+        <label for="otaipaurl">Signed .ipa HTTPS URL
+          <input id="otaipaurl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/apps/MyApp.ipa">
+        </label>
+        <label for="otamanifesturl">Manifest .plist HTTPS URL
+          <input id="otamanifesturl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/apps/MyApp-manifest.plist">
+        </label>
+        <p class="otaerror" id="otaerror" role="alert"></p>
+        <a class="launchbtn launchprimary is-disabled" id="otainstalllink" href="#">Install signed app</a>
+        <button class="launchbtn" id="otadownloadmanifest" type="button">Download manifest.plist</button>
+        <button class="launchbtn" type="submit">Save install links</button>
+        <div class="owncert">
+          <p><strong>Use my own certificate.</strong> Euph0r1n3 will never search the internet for “shared” certificates: public .p12 files contain somebody else’s private signing key and are usually leaked or revoked. You may select your own files below. They are checked locally in this tab only — nothing is uploaded, the files and any password are never saved by this page, and this page never asks for your .p12 password.</p>
+          <label for="ownprofile">Your .mobileprovision
+            <input id="ownprofile" type="file" accept=".mobileprovision">
+          </label>
+          <label for="ownp12">Your certificate .p12 <span>(selected only; contents and password are not read here)</span>
+            <input id="ownp12" type="file" accept=".p12">
+          </label>
+          <p id="owncertstatus">No certificate files selected yet.</p>
+          <button class="launchbtn" id="owncertclear" type="button">Remove certificate files from this session</button>
+          <p>Why is there no “Sign now” button? Real signing has to rewrite and cryptographically sign every Mach-O binary, framework and extension with the private key. That needs a signing engine (your own zsign/AltSign/Xcode-based signer on a computer or in a signer app) — a web page cannot do it reliably or install the result by itself. This checker tells you whether your profile fits this app before you hand the files to your own signer; after signing, use the signed OTA section above.</p>
+        </div>
+      </form>
+      <button class="launchbtn" id="applaunchrefresh" type="button">Choose .ipa again</button>
+      <a class="launchbtn" id="applaunchstore" href="#" target="_blank" rel="noopener noreferrer" hidden>View in App Store</a>
+      <button class="launchbtn" id="applaunchdone" type="button">Back to Tweaks</button>
+    </div>
+    <p class="launchnote">A web page cannot run or sign a native iPhone app by itself. It can open an already-installed copy, or hand a properly signed, HTTPS-hosted copy to the iOS OTA installer.</p>
+  </div>
+</div>
+
+
+
+<div id="webclipview" hidden role="dialog" aria-modal="true" aria-labelledby="webclipviewname">
+  <div class="webclipwindow">
+    <header class="webclipbar">
+      <button class="webclipbtn" id="webclipback" type="button">‹ Tweaks</button>
+      <div class="webclipheading">
+        <span id="webclipviewicon"></span>
+        <span class="webclipheadingtext"><strong id="webclipviewname">Webclip</strong><span id="webclipviewhost"></span></span>
+      </div>
+      <button class="webclipbtn iconbtn" id="webclipreload" type="button" title="Reload" aria-label="Reload webclip">↻</button>
+      <a class="webclipbtn iconbtn" id="webclipexternal" href="#" target="_blank" rel="noopener noreferrer" title="Open in browser" aria-label="Open webclip in browser">↗</a>
+      <button class="webclipbtn iconbtn" id="webclipclose" type="button" title="Close" aria-label="Close webclip">×</button>
+    </header>
+    <div class="webclipstatus"><span id="webclipstatustext">Loading…</span> <a id="webclipthistab" href="#" target="_self">Open in this tab</a></div>
+    <iframe id="webclipframe" title="Webclip content" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="webclipdownload" id="webclipdownload" hidden>
+      <div class="webclipdownloadinner">
+        <div class="webclipdownloadicon" id="webclipdownloadicon"></div>
+        <h3 id="webclipdownloadtitle">Webclip link</h3>
+        <p id="webclipdownloadtext"></p>
+        <div class="webclipdownloadactions">
+          <a class="clipaction primary" id="webclipdownloadlink" href="#" target="_self">Open link</a>
+          <a class="clipaction" id="webclipdownloadbrowser" href="#" target="_blank" rel="noopener noreferrer">Open in browser</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="welcome">
+  <div class="scrim"></div>
+  <div class="card">
+    <h2>Welcome</h2>
+    <p class="sub2">Register to personalize your Euph0r1n3 setup.</p>
+    <form id="regform">
+      <label for="regname">Name</label>
+      <input id="regname" name="name" type="text" placeholder="Your name" autocomplete="name">
+      <label for="regemail">Email</label>
+      <input id="regemail" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+      <button class="go go2" type="submit"><span class="label">Register</span></button>
+      <button class="skip" type="button" id="skipreg">Skip for now</button>
+    </form>
+  </div>
+</div>
+
+<div id="boot" hidden role="button" tabindex="0" aria-label="Return to the page"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 30 C40 21 13 25 13 55 C13 79 31 95 44 95 C48 95 49 93 50 93 C51 93 52 95 56 95 C69 95 87 79 87 55 C87 25 60 21 50 30 Z" fill="#ff5a47"/>
+    <path d="M60 16 C63 6 74 3 81 6 C79 15 69 20 60 16 Z" fill="#9ff5d0"/>
+  </svg><div class="track" aria-hidden="true"><div class="fill" id="bootfill"></div></div><div class="cap">Euph0r1n3 parody page · nothing on your device changed · returns in about a minute, or tap to return</div></div>
+
+<script>
+(function () {
+  var welcome = document.getElementById("welcome");
+  var wrap = document.querySelector(".wrap");
+  var form = document.getElementById("regform");
+  var skip = document.getElementById("skipreg");
+  function closeWelcome(name) {
+    welcome.hidden = true;
+    wrap.classList.remove("blurred");
+    var toast = document.getElementById("toast");
+    toast.textContent = name ? "Welcome, " + name + "." : "Welcome.";
+    toast.hidden = false;
+    requestAnimationFrame(function () { toast.classList.add("show"); });
+    setTimeout(function () {
+      toast.classList.remove("show");
+      setTimeout(function () { toast.hidden = true; }, 400);
+    }, 3200);
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("regname").value.trim();
+    closeWelcome(name);
+  });
+  skip.addEventListener("click", function () { closeWelcome(""); });
+
+  var btn = document.getElementById("go");
+  var log = document.getElementById("log");
+  var prog = document.getElementById("prog");
+  var status = document.getElementById("status");
+  var boot = document.getElementById("boot");
+  var TOTAL = 120000, FAIL_AT = 92000;
+  // Browsers do not reveal the exact model or iOS build, so the page reads the
+  // platform from the user agent and shows the device you told me you use.
+  var ua = navigator.userAgent || "";
+  var platform = /iPad/.test(ua) ? "iPad" : /iPhone/.test(ua) ? "iPhone" : /Android/.test(ua) ? "Android phone" : /Mac/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows PC" : "device";
+  var DEVICE = "iPhone 15", OS = "iOS 26.3 beta";
+  document.getElementById("dev").textContent = "Detected: " + DEVICE + " · " + OS + " · " + platform + " browser";
+  var steps = [
+    [0, "dim", "$ euph0r1n3 --rootless --device auto"],
+    [3000, "", "[*] Euph0r1n3 2.0 (build 4117)"],
+    [6000, "", "[*] Detecting device and OS version..."],
+    [12000, "ok", "[+] Device identified: " + DEVICE + " (" + OS + ")"],
+    [18000, "", "[*] Preparing exploit chain, stage 1/4"],
+    [28000, "ok", "[+] Stage 1 complete"],
+    [36000, "", "[*] Stage 2/4: acquiring kernel primitives"],
+    [48000, "", "[*] Stage 3/4: bypassing pointer authentication"],
+    [60000, "ok", "[+] Stage 3 complete"],
+    [68000, "hot", "[!] Retrying (attempt 2/3)..."],
+    [76000, "ok", "[+] Stage 4/4: sandbox escape complete"],
+    [88000, "", "[*] Remounting root filesystem as read-write"],
+    [98000, "", "[*] Installing package manager"],
+    [108000, "", "[*] Finalizing..."],
+    [117000, "ok", "[✓] Jailbreak complete"],
+    [118500, "", "[*] Rebooting device..."]
+  ];
+  var busy = false, timers = [], tick = null, bootTimer = null, instant = false;
+  function add(cls, text) {
+    var line = document.createElement("div");
+    if (cls) line.className = cls;
+    line.textContent = text;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+  function labelFor(running) { return instant ? "Jailbreak instantly" : "Jailbreak"; }
+  function setBtnLabel(text) {
+    var l = btn.querySelector(".label");
+    if (l) l.textContent = text; else btn.textContent = text;
+  }
+  function reset() {
+    btn.disabled = false;
+    setBtnLabel(labelFor());
+    busy = false;
+    timers = [];
+  }
+  // Dot-matrix apple (an original round apple with a separate leaf), drawn into the log when the run succeeds.
+  var APPLE_BODY = "M50 30 C40 21 13 25 13 55 C13 79 31 95 44 95 C48 95 49 93 50 93 C51 93 52 95 56 95 C69 95 87 79 87 55 C87 25 60 21 50 30 Z";
+  var APPLE_LEAF = "M60 16 C63 6 74 3 81 6 C79 15 69 20 60 16 Z";
+  function drawDotApple() {
+    var N = 46, CELL = 3.5, size = N * CELL;
+    var dpr = window.devicePixelRatio || 1;
+    var wrapEl = document.createElement("div");
+    wrapEl.className = "dotapple";
+    var cv = document.createElement("canvas");
+    cv.width = Math.round(size * dpr); cv.height = Math.round(size * dpr);
+    cv.style.width = size + "px"; cv.style.height = size + "px";
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", "Apple made of dots");
+    wrapEl.appendChild(cv);
+    log.appendChild(wrapEl);
+    log.scrollTop = log.scrollHeight;
+    var ctx = cv.getContext("2d");
+    if (!ctx || !window.Path2D) return;
+    ctx.scale(dpr, dpr);
+    var body = new Path2D(APPLE_BODY), leaf = new Path2D(APPLE_LEAF);
+    var probe = document.createElement("canvas").getContext("2d");
+    var dots = [], step = 100 / N;
+    for (var r = 0; r < N; r++) {
+      for (var c = 0; c < N; c++) {
+        var x = (c + 0.5) * step, y = (r + 0.5) * step;
+        var inLeaf = probe.isPointInPath(leaf, x, y);
+        var inBody = probe.isPointInPath(body, x, y);
+        if (!inLeaf && !inBody) continue;
+        dots.push({ x: (c + 0.5) * CELL, y: (r + 0.5) * CELL, leaf: inLeaf, delay: (r / N) * 900 + Math.random() * 260 });
+      }
+    }
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var t0 = performance.now();
+    function frame(now) {
+      var t = still ? 99999 : now - t0, done = true;
+      ctx.clearRect(0, 0, size, size);
+      for (var i = 0; i < dots.length; i++) {
+        var d = dots[i];
+        var a = Math.max(0, Math.min(1, (t - d.delay) / 240));
+        if (a < 1) done = false;
+        if (a <= 0) continue;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = d.leaf ? "#9ff5d0" : "#ff5a47";
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 1.3 * (0.4 + 0.6 * a), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (!done) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  function finishRun() {
+    drawDotApple();
+    if (window.EuphUnlockTweaks) window.EuphUnlockTweaks(false);
+    setTimeout(showBoot, 2400);
+  }
+  function showBoot() {
+    var fill = document.getElementById("bootfill");
+    fill.style.transition = "none";
+    fill.style.width = "0%";
+    boot.hidden = false;
+    void fill.offsetWidth;
+    fill.style.transition = "width 60s linear";
+    fill.style.width = "100%";
+    boot.focus();
+    bootTimer = setTimeout(closeBoot, 60000);
+  }
+  function closeBoot() {
+    clearTimeout(bootTimer);
+    boot.hidden = true;
+    status.textContent = "done";
+    reset();
+    if (window.EuphUnlockTweaks) window.EuphUnlockTweaks(true);
+  }
+
+  var row = document.getElementById("row15");
+  var hint = document.getElementById("hint");
+  function toggleInstant() {
+    instant = !instant;
+    row.classList.toggle("on", instant);
+    row.setAttribute("aria-pressed", String(instant));
+    hint.textContent = instant ? "Instant mode is on for iPhone 15. Press Jailbreak to finish right away." : "Tip: tap the iPhone 15 row to turn on instant mode, then press Jailbreak.";
+    if (!busy) setBtnLabel(labelFor());
+  }
+
+  var GLOSSARY = {
+    rootless: ["Rootless", "Installs tweaks without remounting the system partition, so the base OS files stay untouched and a restore is simpler."],
+    rootful: ["Rootful", "Remounts the system partition as writable, giving deeper access but a higher chance something breaks on update."]
+  };
+  var gloss = document.getElementById("glossary");
+  var glossOwner = null;
+  function showGlossary(el) {
+    var key = el.getAttribute("data-term");
+    var def = GLOSSARY[key];
+    if (!def) return;
+    gloss.innerHTML = "<b>" + def[0] + "</b>" + def[1];
+    gloss.hidden = false;
+    var r = el.getBoundingClientRect();
+    var top = r.bottom + 8;
+    var left = Math.min(Math.max(8, r.left), window.innerWidth - 268);
+    if (top + 100 > window.innerHeight) top = r.top - 8 - gloss.offsetHeight;
+    gloss.style.top = top + "px";
+    gloss.style.left = left + "px";
+  }
+  document.querySelectorAll(".term-link").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (!gloss.hidden && glossOwner === el) { gloss.hidden = true; glossOwner = null; return; }
+      showGlossary(el);
+      glossOwner = el;
+    });
+  });
+  document.addEventListener("click", function () { gloss.hidden = true; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") gloss.hidden = true; });
+
+  row.addEventListener("click", toggleInstant);
+  row.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleInstant(); } });
+  boot.addEventListener("click", closeBoot);
+  boot.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") closeBoot(); });
+
+  btn.addEventListener("click", function () {
+    if (busy) return;
+    if (instant) {
+      busy = true;
+      btn.disabled = true;
+      log.innerHTML = "";
+      status.textContent = "running";
+      prog.style.transition = "none";
+      prog.style.width = "0%";
+      steps.forEach(function (s, i) {
+        timers.push(setTimeout(function () {
+          add(s[1], s[2]);
+          prog.style.width = Math.round(((i + 1) / steps.length) * 100) + "%";
+        }, i * 120));
+      });
+      timers.push(setTimeout(finishRun, steps.length * 120 + 600));
+      return;
+    }
+    busy = true;
+    btn.disabled = true;
+    log.innerHTML = "";
+    prog.style.transition = "none";
+    prog.style.width = "0%";
+    status.textContent = "running";
+    var willFail = Math.random() < 0.25;
+    var start = Date.now();
+    tick = setInterval(function () {
+      var pct = Math.min(100, Math.round(((Date.now() - start) / TOTAL) * 100));
+      prog.style.width = pct + "%";
+      setBtnLabel("Jailbreaking… " + pct + "%");
+    }, 250);
+    steps.forEach(function (s) {
+      if (willFail && s[0] >= FAIL_AT) return;
+      timers.push(setTimeout(function () { add(s[1], s[2]); }, s[0]));
+    });
+    if (willFail) {
+      timers.push(setTimeout(function () {
+        clearInterval(tick);
+        add("hot", "[✗] Exploit failed: kernel panic avoided. Device was not rebooted.");
+        add("dim", "Tap Jailbreak to try again.");
+        status.textContent = "failed";
+        reset();
+      }, FAIL_AT));
+    } else {
+      timers.push(setTimeout(function () {
+        clearInterval(tick);
+        prog.style.width = "100%";
+        finishRun();
+      }, TOTAL));
+    }
+  });
+})();
+</script>
+
+<script>
+(function () {
+  var dock = document.querySelector(".dock");
+  var items = Array.prototype.slice.call(dock.querySelectorAll("button"));
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function targetOf(key) { return key === "top" ? null : document.getElementById(key); }
+  var pill = dock.querySelector(".pill");
+  var movingTimer = null;
+  function placePill(btn, animate) {
+    if (!btn) return;
+    if (!animate) pill.classList.add("still");
+    pill.style.width = btn.offsetWidth + "px";
+    pill.style.transform = "translateX(" + btn.offsetLeft + "px)";
+    if (!animate) { void pill.offsetWidth; pill.classList.remove("still"); }
+    else {
+      pill.classList.remove("moving"); void pill.offsetWidth; pill.classList.add("moving");
+      clearTimeout(movingTimer);
+      movingTimer = setTimeout(function () { pill.classList.remove("moving"); }, 600);
+    }
+  }
+  var activeKey = null;
+  function setActive(key, instantPlace) {
+    var changed = key !== activeKey;
+    activeKey = key;
+    var target = null;
+    items.forEach(function (b) {
+      if (b.getAttribute("data-go") === key) { b.setAttribute("aria-current", "true"); target = b; }
+      else b.removeAttribute("aria-current");
+    });
+    if (changed || instantPlace) placePill(target, !instantPlace);
+  }
+  items.forEach(function (b) {
+    b.addEventListener("click", function () {
+      var key = b.getAttribute("data-go");
+      var t = targetOf(key);
+      var behavior = reduce ? "auto" : "smooth";
+      if (!t) window.scrollTo({ top: 0, behavior: behavior });
+      else t.scrollIntoView({ behavior: behavior, block: "start" });
+      setActive(key);
+    });
+  });
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var y = window.scrollY || window.pageYOffset;
+    var h = window.innerHeight;
+    var probe = y + h * 0.35;
+    var current = "top";
+    ["devices", "tweaks", "changes", "faq"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top + y <= probe) current = id;
+    });
+    setActive(current);
+  }
+  window.addEventListener("scroll", function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener("resize", function () { setActive(activeKey || "top", true); });
+  setActive("top", true);
+  update();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setActive(activeKey || "top", true); });
+})();
+</script>
+
+<script>
+(function () {
+  var folder = document.getElementById("tweakfolder");
+  var grid = document.getElementById("appgrid");
+  var sub = document.getElementById("tweakssub");
+  var hint = document.getElementById("tweakhint");
+  var msg = document.getElementById("tweakmsg");
+  var input = document.getElementById("ipafile");
+  var resetBtn = document.getElementById("tweakreset");
+  var webForm = document.getElementById("webclipform");
+  var webUrl = document.getElementById("webclipurl");
+  var webName = document.getElementById("webclipname");
+  var webCancel = document.getElementById("webclipcancel");
+  var launchOverlay = document.getElementById("applaunch");
+  var launchIcon = document.getElementById("applaunchicon");
+  var launchName = document.getElementById("applaunchname");
+  var launchMeta = document.getElementById("applaunchmeta");
+  var launchFill = document.getElementById("applaunchfill");
+  var launchStatus = document.getElementById("applaunchstatus");
+  var launchDetails = document.getElementById("applaunchdetails");
+  var launchClose = document.getElementById("applaunchclose");
+  var launchOpenBtn = document.getElementById("applaunchopen");
+  var launchShareBtn = document.getElementById("applaunchshare");
+  var launchRefreshBtn = document.getElementById("applaunchrefresh");
+  var launchStoreLink = document.getElementById("applaunchstore");
+  var launchDoneBtn = document.getElementById("applaunchdone");
+  var launchInstallBtn = document.getElementById("applaunchinstall");
+  var otaForm = document.getElementById("otainstallform");
+  var otaIpaInput = document.getElementById("otaipaurl");
+  var otaManifestInput = document.getElementById("otamanifesturl");
+  var otaError = document.getElementById("otaerror");
+  var otaInstallLink = document.getElementById("otainstalllink");
+  var otaDownloadBtn = document.getElementById("otadownloadmanifest");
+  var ownProfileInput = document.getElementById("ownprofile");
+  var ownP12Input = document.getElementById("ownp12");
+  var ownCertStatus = document.getElementById("owncertstatus");
+  var ownCertClearBtn = document.getElementById("owncertclear");
+  var webclipOverlay = document.getElementById("webclipview");
+  var webclipFrame = document.getElementById("webclipframe");
+  var webclipViewIcon = document.getElementById("webclipviewicon");
+  var webclipViewName = document.getElementById("webclipviewname");
+  var webclipViewHost = document.getElementById("webclipviewhost");
+  var webclipStatusText = document.getElementById("webclipstatustext");
+  var webclipExternal = document.getElementById("webclipexternal");
+  var webclipThisTab = document.getElementById("webclipthistab");
+  var webclipBack = document.getElementById("webclipback");
+  var webclipCloseBtn = document.getElementById("webclipclose");
+  var webclipReloadBtn = document.getElementById("webclipreload");
+  var webclipDownload = document.getElementById("webclipdownload");
+  var webclipDownloadIcon = document.getElementById("webclipdownloadicon");
+  var webclipDownloadTitle = document.getElementById("webclipdownloadtitle");
+  var webclipDownloadText = document.getElementById("webclipdownloadtext");
+  var webclipDownloadLink = document.getElementById("webclipdownloadlink");
+  var webclipDownloadBrowser = document.getElementById("webclipdownloadbrowser");
+  if (!folder || !grid || !input) return;
+
+  var JAIL_KEY = "euph-jailbroken", APPS_KEY = "euph-tweak-apps";
+  var jailbroken = false, apps = [], toastTimer = null, justUnlocked = false, adding = false;
+  var sessionFiles = {};
+  var launchItem = null, launchTimer = null, launchFallbackTimer = null, launchFrame = null;
+  var launchSchemeIndex = 0, launchAttempts = 0, launchLeftPage = false, launchPrevOverflow = "";
+  var webclipItem = null, webclipLoadTimer = null, webclipPrevOverflow = "";
+  // Memory only, by design: certificate files are never put in localStorage.
+  var ownCert = { profileFile: null, profileInfo: null, profileError: "", p12File: null };
+
+  function normalizeItem(a) {
+    if (!a || typeof a.name !== "string") return null;
+    if (a.type === "webclip") {
+      if (typeof a.url !== "string") return null;
+      return { type: "webclip", name: a.name, url: a.url };
+    }
+    if (typeof a.file !== "string") return null;
+    return {
+      type: "ipa", name: a.name, file: a.file, size: Number(a.size) || 0,
+      icon: typeof a.icon === "string" ? a.icon : "",
+      bundleId: typeof a.bundleId === "string" ? a.bundleId : "",
+      schemes: Array.isArray(a.schemes) ? a.schemes.filter(function (s) { return typeof s === "string" && /^[a-z][a-z0-9+.-]*$/i.test(s); }).slice(0, 8) : [],
+      schemesChecked: a.schemesChecked === true,
+      version: typeof a.version === "string" ? a.version : "",
+      bundleVersion: typeof a.bundleVersion === "string" ? a.bundleVersion : "",
+      appStoreId: (typeof a.appStoreId === "string" || typeof a.appStoreId === "number") ? String(a.appStoreId) : "",
+      otaIpaUrl: typeof a.otaIpaUrl === "string" ? a.otaIpaUrl.slice(0, 2048) : "",
+      otaManifestUrl: typeof a.otaManifestUrl === "string" ? a.otaManifestUrl.slice(0, 2048) : ""
+    };
+  }
+  function load() {
+    try {
+      jailbroken = window.localStorage.getItem(JAIL_KEY) === "1";
+      var raw = window.localStorage.getItem(APPS_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(parsed)) apps = parsed.map(normalizeItem).filter(Boolean);
+    } catch (e) { /* storage unavailable (e.g. sandboxed preview): keep everything in memory */ }
+  }
+  function save() {
+    try {
+      if (jailbroken) window.localStorage.setItem(JAIL_KEY, "1");
+      else window.localStorage.removeItem(JAIL_KEY);
+      window.localStorage.setItem(APPS_KEY, JSON.stringify(apps));
+    } catch (e) {
+      // Quota full (icons are the big part): keep names/URLs, drop saved icon art.
+      try {
+        window.localStorage.setItem(APPS_KEY, JSON.stringify(apps.map(function (a) {
+          var copy = Object.assign({}, a); delete copy.icon; return copy;
+        })));
+      } catch (e2) { /* in-memory only */ }
+    }
+  }
+  function toast(text) {
+    var el = document.getElementById("toast");
+    if (!el) return;
+    el.textContent = text;
+    el.hidden = false;
+    requestAnimationFrame(function () { el.classList.add("show"); });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      el.classList.remove("show");
+      setTimeout(function () { el.hidden = true; }, 400);
+    }, 3400);
+  }
+  function showMsg(text, isErr) {
+    msg.textContent = text;
+    msg.className = "tweakmsg " + (isErr ? "err" : "ok");
+    msg.hidden = false;
+  }
+  function fmtSize(n) {
+    n = Number(n) || 0;
+    if (n < 1024) return n + " B";
+    var units = ["KB", "MB", "GB"], v = n / 1024, i = 0;
+    while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+    return (Math.round(v * 10) / 10) + " " + units[i];
+  }
+  function prettyName(file) {
+    var base = String(file || "").replace(/\.ipa$/i, "");
+    var name = base.replace(/[-_]+/g, " ").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    return name || base || "App";
+  }
+  function initials(name) {
+    var parts = String(name || "").split(" ").filter(function (w) { return w.length; });
+    if (!parts.length) return "A";
+    return (parts[0].charAt(0) + (parts.length > 1 ? parts[1].charAt(0) : "")).toUpperCase();
+  }
+  function hueOf(name) {
+    var h = 0, s = String(name || "");
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
+    return h;
+  }
+  function itemKey(a) {
+    return String((a && (a.bundleId || a.file || a.url || a.name)) || "").toLowerCase();
+  }
+
+  /* ---------------- reading a real .ipa (it is a zip) ---------------- */
+  async function sliceBuf(file, start, end) { return await file.slice(start, end).arrayBuffer(); }
+
+  async function inflate(bytes, format) {
+    if (!("DecompressionStream" in window)) throw new Error("DecompressionStream not supported in this browser");
+    var ds = new DecompressionStream(format);
+    var writing = (async function () {
+      var w = ds.writable.getWriter();
+      await w.write(bytes);
+      await w.close();
+    })();
+    var reading = (async function () {
+      var r = ds.readable.getReader(), chunks = [], total = 0;
+      while (true) {
+        var step = await r.read();
+        if (step.done) break;
+        chunks.push(step.value); total += step.value.length;
+      }
+      var out = new Uint8Array(total), pos = 0;
+      chunks.forEach(function (c) { out.set(c, pos); pos += c.length; });
+      return out;
+    })();
+    var results = await Promise.all([writing, reading]);
+    return results[1];
+  }
+
+  function readU64LE(view, offset) {
+    if (view.getBigUint64) {
+      var v = Number(view.getBigUint64(offset, true));
+      if (v > Number.MAX_SAFE_INTEGER) throw new Error("zip64 value too large");
+      return v;
+    }
+    return view.getUint32(offset, true) + view.getUint32(offset + 4, true) * 4294967296;
+  }
+  function normalizeZipName(name) {
+    return String(name || "").split("\\").join("/").replace(/^\.\//, "").replace(/^\//, "");
+  }
+  async function readZipEntries(file) {
+    var tailSize = Math.min(file.size, 65557);
+    if (!tailSize) throw new Error("empty file");
+    var tailStart = file.size - tailSize;
+    var tail = new DataView(await sliceBuf(file, tailStart, file.size));
+    var eocd = -1;
+    for (var i = tail.byteLength - 22; i >= 0; i--) {
+      if (tail.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) throw new Error("zip end record not found");
+    var totalEntries = tail.getUint16(eocd + 10, true);
+    var cdSize = tail.getUint32(eocd + 12, true);
+    var cdOffset = tail.getUint32(eocd + 16, true);
+    if (totalEntries === 0xffff || cdSize === 0xffffffff || cdOffset === 0xffffffff) {
+      // ZIP64: the real values live in the zip64 end record, found via its locator.
+      var locatorAt = tailStart + eocd - 20;
+      if (locatorAt < 0) throw new Error("zip64 locator missing");
+      var locator = new DataView(await sliceBuf(file, locatorAt, locatorAt + 20));
+      if (locator.byteLength < 20 || locator.getUint32(0, true) !== 0x07064b50) throw new Error("zip64 locator missing");
+      var recordAt = readU64LE(locator, 8);
+      var record = new DataView(await sliceBuf(file, recordAt, recordAt + 56));
+      if (record.byteLength < 56 || record.getUint32(0, true) !== 0x06064b50) throw new Error("zip64 end record missing");
+      totalEntries = readU64LE(record, 32);
+      cdSize = readU64LE(record, 40);
+      cdOffset = readU64LE(record, 48);
+    }
+    var cdRaw = await sliceBuf(file, cdOffset, cdOffset + cdSize);
+    var cd = new DataView(cdRaw);
+    var cdBytes = new Uint8Array(cdRaw);
+    var decoder = new TextDecoder("utf-8");
+    var entries = [], pos = 0;
+    while (pos + 46 <= cd.byteLength && cd.getUint32(pos, true) === 0x02014b50) {
+      var nameLen = cd.getUint16(pos + 28, true);
+      var extraLen = cd.getUint16(pos + 30, true);
+      var commentLen = cd.getUint16(pos + 32, true);
+      var name = normalizeZipName(decoder.decode(cdBytes.subarray(pos + 46, pos + 46 + nameLen)));
+      var entry = {
+        name: name,
+        method: cd.getUint16(pos + 10, true),
+        compressedSize: cd.getUint32(pos + 20, true),
+        size: cd.getUint32(pos + 24, true),
+        localOffset: cd.getUint32(pos + 42, true)
+      };
+      if (entry.size === 0xffffffff || entry.compressedSize === 0xffffffff || entry.localOffset === 0xffffffff || cd.getUint16(pos + 34, true) === 0xffff) {
+        // ZIP64 extra field (id 0x0001): 8-byte values, in a fixed order,
+        // present only for the header fields above that are saturated.
+        var xp = pos + 46 + nameLen, xEnd = xp + extraLen;
+        while (xp + 4 <= xEnd && xp + 4 <= cd.byteLength) {
+          var xId = cd.getUint16(xp, true), xSize = cd.getUint16(xp + 2, true), xData = xp + 4;
+          if (xId === 0x0001) {
+            var zp = xData;
+            if (entry.size === 0xffffffff) { entry.size = readU64LE(cd, zp); zp += 8; }
+            if (entry.compressedSize === 0xffffffff) { entry.compressedSize = readU64LE(cd, zp); zp += 8; }
+            if (entry.localOffset === 0xffffffff) { entry.localOffset = readU64LE(cd, zp); zp += 8; }
+            break;
+          }
+          xp = xData + xSize;
+        }
+      }
+      entries.push(entry);
+      pos += 46 + nameLen + extraLen + commentLen;
+      if (totalEntries > 0 && entries.length >= totalEntries) break;
+    }
+    return entries;
+  }
+
+  async function entryBytes(file, entry) {
+    var headRaw = await sliceBuf(file, entry.localOffset, entry.localOffset + 30);
+    var head = new DataView(headRaw);
+    if (head.byteLength < 30 || head.getUint32(0, true) !== 0x04034b50) throw new Error("bad local file header for " + entry.name);
+    var start = entry.localOffset + 30 + head.getUint16(26, true) + head.getUint16(28, true);
+    var raw = new Uint8Array(await sliceBuf(file, start, start + entry.compressedSize));
+    if (entry.method === 0) return raw;
+    if (entry.method === 8) return await inflate(raw, "deflate-raw");
+    throw new Error("unsupported zip compression method " + entry.method);
+  }
+
+  /* Info.plist: handle both XML and binary (bplist00) plists. */
+  function readUIntBE(view, offset, size) {
+    var v = 0;
+    for (var i = 0; i < size; i++) v = v * 256 + view.getUint8(offset + i);
+    return v;
+  }
+  function parseBplist(bytes) {
+    var view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    var trailer = bytes.length - 32;
+    if (trailer < 8) return null;
+    var offsetSize = view.getUint8(trailer + 6);
+    var refSize = view.getUint8(trailer + 7);
+    var numObjects = Number(view.getBigUint64(trailer + 8, false));
+    var topObject = Number(view.getBigUint64(trailer + 16, false));
+    var offsetsAt = Number(view.getBigUint64(trailer + 24, false));
+    var offsets = [];
+    for (var i = 0; i < numObjects; i++) offsets.push(readUIntBE(view, offsetsAt + i * offsetSize, offsetSize));
+    var decoder = new TextDecoder("utf-8");
+    function parseObject(index, depth) {
+      if (depth > 100 || index < 0 || index >= offsets.length) return null;
+      var pos = offsets[index];
+      var marker = view.getUint8(pos++);
+      var type = marker >> 4, info = marker & 0x0f;
+      function length() {
+        if (info !== 0x0f) return info;
+        var intMarker = view.getUint8(pos++);
+        var size = 1 << (intMarker & 0x0f);
+        var value = readUIntBE(view, pos, size);
+        pos += size;
+        return value;
+      }
+      switch (type) {
+        case 0x0: return info === 0x9 ? true : info === 0x8 ? false : null;
+        case 0x1: {
+          var intSize = 1 << info, big = 0n;
+          for (var b = 0; b < intSize; b++) big = (big << 8n) + BigInt(view.getUint8(pos + b));
+          if (intSize > 0 && (view.getUint8(pos) & 0x80)) big -= (1n << BigInt(intSize * 8));
+          return Number(big);
+        }
+        case 0x2: {
+          var realSize = 1 << info;
+          return realSize === 4 ? view.getFloat32(pos, false) : view.getFloat64(pos, false);
+        }
+        case 0x3: return view.getFloat64(pos, false);
+        case 0x4: { var dl = length(); return bytes.slice(pos, pos + dl); }
+        case 0x5: { var al = length(); return decoder.decode(bytes.subarray(pos, pos + al)); }
+        case 0x6: {
+          var ul = length(), chars = [];
+          for (var u = 0; u < ul; u++) chars.push(view.getUint16(pos + u * 2, false));
+          var out = "";
+          for (var c = 0; c < chars.length; c += 8192) out += String.fromCharCode.apply(null, chars.slice(c, c + 8192));
+          return out;
+        }
+        case 0x8: return readUIntBE(view, pos, info + 1);
+        case 0xa: {
+          var count = length(), arr = [];
+          for (var a = 0; a < count; a++) arr.push(parseObject(readUIntBE(view, pos + a * refSize, refSize), depth + 1));
+          return arr;
+        }
+        case 0xd: {
+          var entries = length(), obj = {}, keys = [], vals = [], d;
+          for (d = 0; d < entries; d++) keys.push(readUIntBE(view, pos + d * refSize, refSize));
+          for (d = 0; d < entries; d++) vals.push(readUIntBE(view, pos + (entries + d) * refSize, refSize));
+          for (d = 0; d < entries; d++) {
+            var k = parseObject(keys[d], depth + 1);
+            if (typeof k === "string") obj[k] = parseObject(vals[d], depth + 1);
+          }
+          return obj;
+        }
+        default: return null;
+      }
+    }
+    return parseObject(topObject, 0);
+  }
+  function xmlPlistValue(node) {
+    if (!node) return null;
+    var children = Array.prototype.filter.call(node.childNodes || [], function (n) { return n.nodeType === 1; });
+    switch (node.tagName) {
+      case "dict": {
+        var obj = {};
+        for (var i = 0; i + 1 < children.length; i += 2) if (children[i].tagName === "key") obj[children[i].textContent] = xmlPlistValue(children[i + 1]);
+        return obj;
+      }
+      case "array": return children.map(xmlPlistValue);
+      case "true": return true;
+      case "false": return false;
+      case "integer": case "real": return Number(node.textContent);
+      default: return node.textContent;
+    }
+  }
+  function parsePlist(bytes) {
+    try {
+      var head = new TextDecoder("utf-8").decode(bytes.subarray(0, Math.min(8, bytes.length)));
+      if (head.indexOf("bplist") === 0) return parseBplist(bytes);
+      var text = new TextDecoder("utf-8").decode(bytes);
+      var doc = new DOMParser().parseFromString(text, "application/xml");
+      var root = doc.querySelector("plist > *");
+      return root ? xmlPlistValue(root) : null;
+    } catch (e) { return null; }
+  }
+
+  /* Turns icon image bytes into a small data-URL thumbnail that can be saved. */
+  function drawThumb(source) {
+    var size = 144;
+    var canvas = document.createElement("canvas");
+    canvas.width = size; canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    var w = source.naturalWidth || source.videoWidth || source.width;
+    var h = source.naturalHeight || source.videoHeight || source.height;
+    if (!ctx || !w || !h) return "";
+    var scale = Math.max(size / w, size / h);
+    var dw = Math.ceil(w * scale), dh = Math.ceil(h * scale);
+    ctx.drawImage(source, Math.round((size - dw) / 2), Math.round((size - dh) / 2), dw, dh);
+    return canvas.toDataURL("image/png");
+  }
+  function paeth(a, b, c) {
+    var p = a + b - c;
+    var pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c);
+    return pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+  }
+  async function pngBytesToThumb(bytes) {
+    // Fallback decoder for Apple "CgBI"-optimized PNGs (common inside .ipa
+    // files) that some browsers refuse to decode as <img>.
+    var view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    var decoder = new TextDecoder("ascii");
+    var pos = 8, width = 0, height = 0, bitDepth = 0, colorType = 0, interlace = 0, isCgBI = false, idat = [], palette = null, trans = null;
+    while (pos + 12 <= bytes.length) {
+      var len = view.getUint32(pos, false);
+      var kind = decoder.decode(bytes.subarray(pos + 4, pos + 8));
+      var dataAt = pos + 8;
+      if (dataAt + len > bytes.length) break;
+      if (kind === "CgBI") isCgBI = true;
+      else if (kind === "IHDR") {
+        width = view.getUint32(dataAt, false); height = view.getUint32(dataAt + 4, false);
+        bitDepth = view.getUint8(dataAt + 8); colorType = view.getUint8(dataAt + 9); interlace = view.getUint8(dataAt + 12);
+      } else if (kind === "PLTE") palette = bytes.slice(dataAt, dataAt + len);
+      else if (kind === "tRNS") trans = bytes.slice(dataAt, dataAt + len);
+      else if (kind === "IDAT") idat.push(bytes.subarray(dataAt, dataAt + len));
+      else if (kind === "IEND") break;
+      pos = dataAt + len + 4;
+    }
+    var channels = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 }[colorType] || 0;
+    if (!width || !height || bitDepth !== 8 || interlace !== 0 || !channels) return "";
+    if (colorType === 3 && !palette) return "";
+    var joinedLength = idat.reduce(function (sum, part) { return sum + part.length; }, 0);
+    var joined = new Uint8Array(joinedLength), at = 0;
+    idat.forEach(function (part) { joined.set(part, at); at += part.length; });
+    // Standard PNGs wrap the data in zlib; CgBI PNGs use raw deflate.
+    var raw = await inflate(joined, isCgBI ? "deflate-raw" : "deflate");
+    var rowBytes = width * channels;
+    if (raw.length < (rowBytes + 1) * height) return "";
+    var pixels = new Uint8ClampedArray(width * height * 4);
+    var prev = new Uint8Array(rowBytes);
+    for (var y = 0; y < height; y++) {
+      var rowStart = y * (rowBytes + 1);
+      var filter = raw[rowStart];
+      var row = Uint8Array.from(raw.subarray(rowStart + 1, rowStart + 1 + rowBytes));
+      for (var x = 0; x < rowBytes; x++) {
+        var left = x >= channels ? row[x - channels] : 0;
+        var up = prev[x] || 0;
+        var upLeft = x >= channels ? prev[x - channels] : 0;
+        if (filter === 1) row[x] = (row[x] + left) & 0xff;
+        else if (filter === 2) row[x] = (row[x] + up) & 0xff;
+        else if (filter === 3) row[x] = (row[x] + Math.floor((left + up) / 2)) & 0xff;
+        else if (filter === 4) row[x] = (row[x] + paeth(left, up, upLeft)) & 0xff;
+      }
+      for (var px = 0; px < width; px++) {
+        var src = px * channels, dst = (y * width + px) * 4;
+        if (colorType === 3) {
+          var idx = row[src], pi = idx * 3;
+          if (pi + 2 >= palette.length) continue;
+          pixels[dst] = palette[pi]; pixels[dst + 1] = palette[pi + 1]; pixels[dst + 2] = palette[pi + 2];
+          pixels[dst + 3] = trans && idx < trans.length ? trans[idx] : 255;
+        } else if (colorType === 0) {
+          pixels[dst] = pixels[dst + 1] = pixels[dst + 2] = row[src]; pixels[dst + 3] = 255;
+        } else if (colorType === 4) {
+          var ga = row[src + 1], gg = row[src];
+          if (isCgBI && ga > 0 && ga < 255) gg = Math.min(255, Math.round(gg * 255 / ga));
+          pixels[dst] = pixels[dst + 1] = pixels[dst + 2] = gg; pixels[dst + 3] = ga;
+        } else if (colorType === 2) {
+          if (isCgBI) { pixels[dst] = row[src + 2]; pixels[dst + 1] = row[src + 1]; pixels[dst + 2] = row[src]; }
+          else { pixels[dst] = row[src]; pixels[dst + 1] = row[src + 1]; pixels[dst + 2] = row[src + 2]; }
+          pixels[dst + 3] = 255;
+        } else if (isCgBI) {
+          // CgBI: BGRA order, colour premultiplied by alpha.
+          var alpha = row[src + 3];
+          if (alpha === 0) { pixels[dst + 3] = 0; continue; }
+          pixels[dst] = Math.min(255, Math.round(row[src + 2] * 255 / alpha));
+          pixels[dst + 1] = Math.min(255, Math.round(row[src + 1] * 255 / alpha));
+          pixels[dst + 2] = Math.min(255, Math.round(row[src] * 255 / alpha));
+          pixels[dst + 3] = alpha;
+        } else {
+          pixels[dst] = row[src]; pixels[dst + 1] = row[src + 1]; pixels[dst + 2] = row[src + 2];
+          pixels[dst + 3] = row[src + 3];
+        }
+      }
+      prev = row;
+    }
+    var full = document.createElement("canvas");
+    full.width = width; full.height = height;
+    var fctx = full.getContext("2d");
+    if (!fctx) return "";
+    var imageData = fctx.createImageData(width, height);
+    imageData.data.set(pixels);
+    fctx.putImageData(imageData, 0, 0);
+    return drawThumb(full);
+  }
+  async function iconBytesToThumb(bytes) {
+    var isPng = bytes.length > 4 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
+    var type = isPng ? "image/png" : (bytes[0] === 0xff && bytes[1] === 0xd8 ? "image/jpeg" : "image/png");
+    var blob = new Blob([bytes], { type: type });
+    try {
+      if ("createImageBitmap" in window) {
+        var bitmap = await createImageBitmap(blob);
+        try { return drawThumb(bitmap); } finally { if (bitmap.close) bitmap.close(); }
+      }
+      throw new Error("no createImageBitmap");
+    } catch (e) {
+      try {
+        var thumb = await new Promise(function (resolve, reject) {
+          var url = URL.createObjectURL(blob);
+          var img = new Image();
+          img.onload = function () { try { resolve(drawThumb(img)); } catch (err) { reject(err); } URL.revokeObjectURL(url); };
+          img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("image decode failed")); };
+          img.src = url;
+        });
+        if (thumb) return thumb;
+      } catch (e2) { /* try the PNG fallback below */ }
+      if (isPng) {
+        try { return await pngBytesToThumb(bytes); } catch (e3) { return ""; }
+      }
+      return "";
+    }
+  }
+
+  function collectIconBases(info) {
+    var bases = [];
+    function push(v) {
+      if (Array.isArray(v)) v.forEach(push);
+      else if (typeof v === "string" && v) bases.push(v.replace(/\.png$/i, ""));
+    }
+    if (info) {
+      [info.CFBundleIcons, info["CFBundleIcons~ipad"]].forEach(function (icons) {
+        var primary = icons && icons.CFBundlePrimaryIcon;
+        if (primary) { push(primary.CFBundleIconFiles); push(primary.CFBundleIconName); }
+      });
+      push(info.CFBundleIconFiles);
+      push(info.CFBundleIconFile);
+    }
+    // Asset-catalog names like "AppIcon" or "YandexIcon" usually ship beside
+    // dimensioned files, e.g. YandexIcon60x60@2x.png.
+    bases.slice().forEach(function (base) {
+      if (!/\d+(?:\.\d+)?x\d/i.test(base)) {
+        push(base + "60x60"); push(base + "76x76"); push(base + "83.5x83.5");
+        push(base + "-60"); push(base + "-76");
+      }
+    });
+    ["AppIcon60x60", "AppIcon76x76", "AppIcon83.5x83.5", "AppIcon", "Icon-60", "Icon-76", "Icon"].forEach(push);
+    return bases.filter(function (v, i) { return bases.indexOf(v) === i; });
+  }
+  function iconEntryScore(e, appPrefix) {
+    var inApp = appPrefix && e.name.indexOf(appPrefix) === 0;
+    var rest = inApp ? e.name.slice(appPrefix.length) : e.name;
+    var fileName = rest.split("/").pop() || "";
+    var lower = fileName.toLowerCase();
+    var s = Math.min(20, (e.size || 0) / 10000);
+    if (inApp && rest.indexOf("/") === -1) s += 60;
+    else if (inApp) s += 30;
+    if (lower.indexOf("appicon") !== -1) s += 80;
+    else if (lower.indexOf("itunesartwork") !== -1) s += 70;
+    else if (lower.indexOf("icon") !== -1) s += 40;
+    else if (lower.indexOf("artwork") !== -1) s += 25;
+    if (/@3x/i.test(fileName)) s += 30; else if (/@2x/i.test(fileName)) s += 22;
+    if (/1024/.test(fileName)) s += 40;
+    if (/60x60|76x76|83\.5|180|167|152|144|120/.test(fileName)) s += 18;
+    return s;
+  }
+  function iconCandidateEntries(entries, appPrefix, info) {
+    var byLower = {}, out = [], seen = {};
+    entries.forEach(function (e) { byLower[e.name.toLowerCase()] = e; });
+    function addEntry(e) {
+      if (e && !seen[e.name] && (e.size === 0 || e.size <= 25 * 1024 * 1024)) { seen[e.name] = true; out.push(e); }
+    }
+    function add(path) { addEntry(byLower[String(path).toLowerCase()]); }
+    add("iTunesArtwork@2x"); add("iTunesArtwork");
+    add(appPrefix + "iTunesArtwork@2x"); add(appPrefix + "iTunesArtwork");
+    add(appPrefix + "iTunesArtwork@2x.png"); add(appPrefix + "iTunesArtwork.png");
+    var suffixes = ["@3x.png", "@2x.png", "@3x~iphone.png", "@2x~iphone.png", "@3x~ipad.png", "@2x~ipad.png",
+      "~iphone@3x.png", "~iphone@2x.png", "~ipad@3x.png", "~ipad@2x.png", "~iphone.png", "~ipad.png", "@1x.png", ".png"];
+    collectIconBases(info).forEach(function (base) {
+      var clean = base.replace(/@(2x|3x)(~[a-z]+)?$/i, "");
+      suffixes.forEach(function (suffix) { add(appPrefix + clean + suffix); });
+      add(clean + ".png");
+    });
+    function isImageName(name) { return /\.(png|jpe?g)$/i.test(name); }
+    // Icon-looking images anywhere in the bundle (some apps nest them).
+    entries.filter(function (e) {
+      var fileName = (e.name.split("/").pop() || "").toLowerCase();
+      return isImageName(fileName) && /appicon|icon|itunesartwork|artwork/.test(fileName) && e.size <= 25 * 1024 * 1024;
+    }).sort(function (a, b) { return iconEntryScore(b, appPrefix) - iconEntryScore(a, appPrefix); }).forEach(addEntry);
+    // Last resort: any image sitting loose in the .app folder.
+    if (appPrefix) {
+      entries.filter(function (e) {
+        if (e.name.indexOf(appPrefix) !== 0) return false;
+        var rest = e.name.slice(appPrefix.length);
+        return rest.indexOf("/") === -1 && isImageName(rest) && e.size >= 2048 && e.size <= 10 * 1024 * 1024;
+      }).sort(function (a, b) { return iconEntryScore(b, appPrefix) - iconEntryScore(a, appPrefix); }).forEach(addEntry);
+    }
+    return out.slice(0, 30);
+  }
+  function sequenceAt(bytes, start, seq) {
+    if (start + seq.length > bytes.length) return false;
+    for (var i = 0; i < seq.length; i++) if (bytes[start + i] !== seq[i]) return false;
+    return true;
+  }
+  function pngDimensionsAndEnd(bytes, start, view) {
+    var pos = start + 8, width = 0, height = 0, first = true, guard = 0;
+    while (pos + 12 <= bytes.length && guard++ < 200) {
+      var len = view.getUint32(pos, false);
+      if (len > bytes.length) return null;
+      var kind = String.fromCharCode(bytes[pos + 4], bytes[pos + 5], bytes[pos + 6], bytes[pos + 7]);
+      if (first && kind !== "IHDR") return null;
+      if (kind === "IHDR") { width = view.getUint32(pos + 8, false); height = view.getUint32(pos + 12, false); }
+      if (kind === "IEND") return width && height ? { width: width, height: height, end: pos + 12 + len } : null;
+      first = false;
+      pos += 12 + len;
+    }
+    return null;
+  }
+  function jpegDimensionsAndEnd(bytes, start, view) {
+    var pos = start + 2, width = 0, height = 0, guard = 0;
+    var sof = { 0xc0: 1, 0xc1: 1, 0xc2: 1, 0xc3: 1, 0xc5: 1, 0xc6: 1, 0xc7: 1, 0xc9: 1, 0xca: 1, 0xcb: 1, 0xcd: 1, 0xce: 1, 0xcf: 1 };
+    while (pos + 4 <= bytes.length && guard++ < 300) {
+      if (bytes[pos] !== 0xff) return null;
+      var marker = bytes[pos + 1];
+      while (marker === 0xff && pos + 2 < bytes.length) { pos++; marker = bytes[pos + 1]; }
+      if (marker === 0xd9) return width && height ? { width: width, height: height, end: pos + 2 } : null;
+      if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) { pos += 2; continue; }
+      var segLen = view.getUint16(pos + 2, false);
+      if (segLen < 2 || pos + 2 + segLen > bytes.length) return null;
+      if (sof[marker] && segLen >= 7) { height = view.getUint16(pos + 5, false); width = view.getUint16(pos + 7, false); }
+      if (marker === 0xda) {
+        for (var i = pos + 2 + segLen; i + 1 < bytes.length; i++) {
+          if (bytes[i] === 0xff && bytes[i + 1] === 0xd9) return width && height ? { width: width, height: height, end: i + 2 } : null;
+        }
+        return null;
+      }
+      pos += 2 + segLen;
+    }
+    return null;
+  }
+  function embeddedImageCandidates(bytes) {
+    var view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    var pngSig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+    var out = [], i, found;
+    for (i = 0; i + 8 <= bytes.length && out.length < 80; i++) {
+      if (bytes[i] === 0x89 && sequenceAt(bytes, i, pngSig)) {
+        found = pngDimensionsAndEnd(bytes, i, view);
+        if (found && found.end > i) { out.push({ bytes: bytes.slice(i, found.end), width: found.width, height: found.height }); i = found.end - 1; }
+      }
+    }
+    for (i = 0; i + 3 <= bytes.length && out.length < 120; i++) {
+      if (bytes[i] === 0xff && bytes[i + 1] === 0xd8 && bytes[i + 2] === 0xff) {
+        found = jpegDimensionsAndEnd(bytes, i, view);
+        if (found && found.end > i) { out.push({ bytes: bytes.slice(i, found.end), width: found.width, height: found.height }); i = found.end - 1; }
+      }
+    }
+    return out;
+  }
+  function embeddedIconScore(c) {
+    if (!c.width || c.width !== c.height || c.width < 48 || c.width > 2048) return -10000;
+    var preferred = [1024, 180, 192, 167, 152, 144, 120, 512, 256];
+    var distance = Math.min.apply(null, preferred.map(function (s) { return Math.abs(c.width - s); }));
+    return 1000 - distance + (c.width >= 120 ? 80 : 0);
+  }
+  async function iconFromAssetsCar(file, entries, appPrefix) {
+    var cars = entries.filter(function (e) {
+      var fileName = (e.name.split("/").pop() || "").toLowerCase();
+      return fileName === "assets.car" && e.size > 0 && e.size <= 64 * 1024 * 1024;
+    }).sort(function (a, b) {
+      function rank(e) {
+        if (appPrefix && e.name === appPrefix + "Assets.car") return 0;
+        if (appPrefix && e.name.indexOf(appPrefix) === 0) return 1;
+        return 2;
+      }
+      return rank(a) - rank(b) || a.size - b.size;
+    });
+    for (var i = 0; i < cars.length; i++) {
+      try {
+        var candidates = embeddedImageCandidates(await entryBytes(file, cars[i]))
+          .filter(function (c) { return embeddedIconScore(c) > -10000; })
+          .sort(function (a, b) { return embeddedIconScore(b) - embeddedIconScore(a); })
+          .slice(0, 12);
+        for (var j = 0; j < candidates.length; j++) {
+          var icon = await iconBytesToThumb(candidates[j].bytes);
+          if (icon) return icon;
+        }
+      } catch (e) { /* try the next catalog */ }
+    }
+    return "";
+  }
+
+  function cleanUrlScheme(value) {
+    if (typeof value !== "string") return "";
+    var s = value.trim().toLowerCase().replace(/:(\/\/)?$/, "");
+    if (!/^[a-z][a-z0-9+.-]*$/.test(s)) return "";
+    if (s === "http" || s === "https" || s === "file" || s === "javascript" || s === "data") return "";
+    return s;
+  }
+  function slugifyLaunch(value) { return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
+  function extractSchemes(info, name, bundleId) {
+    // CFBundleURLTypes -> CFBundleURLSchemes are the links other apps (and web
+    // pages) can use to open this app, e.g. minecraft://. Score them so the
+    // plain "open the app" scheme wins over OAuth/SDK callback schemes.
+    if (!info || !Array.isArray(info.CFBundleURLTypes)) return [];
+    var nameSlug = slugifyLaunch(name);
+    var bundleTail = slugifyLaunch(String(bundleId || "").split(".").pop() || "");
+    var found = [], seen = {};
+    info.CFBundleURLTypes.forEach(function (type) {
+      var schemes = type && type.CFBundleURLSchemes;
+      var urlName = type && typeof type.CFBundleURLName === "string" ? type.CFBundleURLName : "";
+      if (!Array.isArray(schemes)) return;
+      schemes.forEach(function (raw) {
+        var s = cleanUrlScheme(raw);
+        if (!s || seen[s]) return;
+        seen[s] = true;
+        var score = 0, slug = slugifyLaunch(s);
+        if (nameSlug && slug === nameSlug) score += 100;
+        else if (nameSlug && slug && (nameSlug.indexOf(slug) === 0 || slug.indexOf(nameSlug) === 0)) score += 55;
+        if (bundleTail && slug === bundleTail) score += 80;
+        if (bundleId && urlName === bundleId) score += 25;
+        if (s === String(bundleId || "").toLowerCase()) score += 45;
+        if (s.indexOf(".") === -1) score += 10; else score -= 12;
+        if (s.length <= 20) score += 5;
+        if (/oauth|auth|callback|googleusercontent|loginsdk|signin/.test(s)) score -= 80;
+        if (/^fb\d/.test(s) || s === "fbapi") score -= 80;
+        if (/^(prefs|app-prefs|tel|sms|mailto|facetime|itms|itms-apps|itms-services|music|ibooks|keynote|pages|numbers)$/.test(s)) score -= 100;
+        found.push({ scheme: s, score: score, order: found.length });
+      });
+    });
+    found.sort(function (a, b) { return b.score - a.score || a.order - b.order; });
+    return found.slice(0, 8).map(function (f) { return f.scheme; });
+  }
+  function findStoreId(value, depth) {
+    if (!value || depth > 3 || value instanceof Uint8Array) return "";
+    if (Array.isArray(value)) {
+      for (var i = 0; i < value.length; i++) { var fromArr = findStoreId(value[i], depth + 1); if (fromArr) return fromArr; }
+      return "";
+    }
+    if (typeof value !== "object") return "";
+    var keys = ["itemId", "item-id", "appleId", "apple-id", "storeItemId"], k, v;
+    for (k = 0; k < keys.length; k++) {
+      if (Object.prototype.hasOwnProperty.call(value, keys[k])) {
+        v = String(value[keys[k]] == null ? "" : value[keys[k]]).trim();
+        if (/^\d{5,}$/.test(v)) return v;
+      }
+    }
+    var all = Object.keys(value);
+    for (k = 0; k < all.length; k++) { var nested = findStoreId(value[all[k]], depth + 1); if (nested) return nested; }
+    return "";
+  }
+  function describeIpaProblem(e) {
+    var m = String((e && e.message) || e || "");
+    if (/DecompressionStream/i.test(m)) return "this browser/viewer cannot unpack .ipa files — open the page in Safari and try again";
+    if (/zip|local file header|compression method/i.test(m)) return "the file could not be read as a standard .ipa";
+    return "the .ipa could not be read";
+  }
+  async function parseIpa(file) {
+    var fallback = { name: prettyName(file.name), icon: "", bundleId: "", schemes: [], schemesChecked: false, version: "", bundleVersion: "", appStoreId: "", problem: "" };
+    try {
+      var entries = await readZipEntries(file);
+      var infoEntry = null, appPrefix = "";
+      for (var i = 0; i < entries.length; i++) {
+        var m = entries[i].name.match(/^(Payload\/[^/]+\.app\/)Info\.plist$/i);
+        if (m) { infoEntry = entries[i]; appPrefix = m[1]; break; }
+      }
+      if (!infoEntry) {
+        for (var j = 0; j < entries.length; j++) {
+          var m2 = entries[j].name.match(/^(?:.*\/)?([^/]+\.app\/)Info\.plist$/i);
+          if (m2) { infoEntry = entries[j]; appPrefix = entries[j].name.slice(0, entries[j].name.length - "Info.plist".length); break; }
+        }
+      }
+      var info = null;
+      if (infoEntry) info = parsePlist(await entryBytes(file, infoEntry));
+      var name = fallback.name, bundleId = "", schemes = [], schemesChecked = false, version = "", bundleVersion = "", appStoreId = "";
+      if (info) {
+        if (typeof info.CFBundleDisplayName === "string" && info.CFBundleDisplayName) name = info.CFBundleDisplayName;
+        else if (typeof info.CFBundleName === "string" && info.CFBundleName) name = info.CFBundleName;
+        if (typeof info.CFBundleIdentifier === "string") bundleId = info.CFBundleIdentifier;
+        var v = info.CFBundleShortVersionString;
+        if (v == null || v === "") v = info.CFBundleVersion;
+        if (typeof v === "string" || typeof v === "number") version = String(v);
+        if (typeof info.CFBundleVersion === "string" || typeof info.CFBundleVersion === "number") bundleVersion = String(info.CFBundleVersion);
+        schemes = extractSchemes(info, name, bundleId);
+        schemesChecked = true;
+      }
+      var metadataEntry = null;
+      for (var me = 0; me < entries.length; me++) {
+        if (/(^|\/)itunesmetadata\.plist$/i.test(entries[me].name)) { metadataEntry = entries[me]; break; }
+      }
+      if (metadataEntry) {
+        try { appStoreId = findStoreId(parsePlist(await entryBytes(file, metadataEntry)), 0); } catch (e) { appStoreId = ""; }
+      }
+      var icon = "";
+      var candidates = iconCandidateEntries(entries, appPrefix, info);
+      for (var k = 0; k < candidates.length; k++) {
+        try {
+          icon = await iconBytesToThumb(await entryBytes(file, candidates[k]));
+          if (icon) break;
+        } catch (e) { /* try the next candidate */ }
+      }
+      if (!icon) icon = await iconFromAssetsCar(file, entries, appPrefix);
+      return { name: name, icon: icon, bundleId: bundleId, schemes: schemes, schemesChecked: schemesChecked, version: version, bundleVersion: bundleVersion, appStoreId: appStoreId, problem: "" };
+    } catch (e) {
+      fallback.problem = describeIpaProblem(e);
+      return fallback;
+    }
+  }
+
+  /* ---------------- webclips ---------------- */
+  function cleanWebclipUrl(raw) {
+    var value = String(raw || "").trim();
+    if (!value) return "";
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) value = "https://" + value;
+    try {
+      var url = new URL(value);
+      if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+      if (!url.hostname) return "";
+      return url.href;
+    } catch (e) { return ""; }
+  }
+  function defaultWebclipName(urlHref) {
+    try {
+      var url = new URL(urlHref);
+      var last = url.pathname.split("/").filter(Boolean).pop() || "";
+      if (/\.mobileconfig$/i.test(last)) return prettyName(decodeURIComponent(last.replace(/\.mobileconfig$/i, "")));
+      var host = url.hostname.replace(/^www\./i, "");
+      var labels = host.split(".").filter(Boolean);
+      var name = labels.length > 1 ? labels[labels.length - 2] : labels[0] || host;
+      name = name.replace(/[-_]+/g, " ");
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    } catch (e) { return "Webclip"; }
+  }
+  function hostOf(urlHref) {
+    try { return new URL(urlHref).hostname; } catch (e) { return "Webclip"; }
+  }
+  function webIconSources(urlHref) {
+    try {
+      var url = new URL(urlHref);
+      return [
+        url.origin + "/apple-touch-icon.png",
+        url.origin + "/apple-touch-icon-precomposed.png",
+        url.origin + "/favicon.ico",
+        "https://www.google.com/s2/favicons?domain=" + encodeURIComponent(url.hostname) + "&sz=128"
+      ];
+    } catch (e) { return []; }
+  }
+  function addWebclip(rawUrl, rawName) {
+    if (!jailbroken) return false;
+    var url = cleanWebclipUrl(rawUrl);
+    if (!url) { showMsg("That link doesn't look valid — paste a full webclip link, e.g. https://example.com/app.", true); return false; }
+    var clean = function (u) { return String(u || "").replace(/\/$/, "").toLowerCase(); };
+    var exists = apps.some(function (a) { return a.type === "webclip" && clean(a.url) === clean(url); });
+    if (exists) { showMsg("That webclip is already in Tweaks.", true); return false; }
+    var name = String(rawName || "").replace(/\s+/g, " ").trim() || defaultWebclipName(url);
+    apps.push({ type: "webclip", name: name, url: url });
+    save();
+    render();
+    showMsg("Added webclip to Tweaks: " + name + " (" + hostOf(url) + "). Tap it to open it inside Tweaks.", false);
+    return true;
+  }
+
+  /* ---------------- tiles ---------------- */
+  var STORE_ICON = '<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="euphStoreG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a75"/><stop offset=".55" stop-color="#ff5a47"/><stop offset="1" stop-color="#d92c1a"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#euphStoreG)"/><circle cx="48" cy="15" r="4" fill="#9ff5d0"/><path d="M25.5 27v-2.5a6.5 6.5 0 0 1 13 0V27" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><path d="M20.5 25h23l-1.2 21.4a4.2 4.2 0 0 1-4.2 4H25.9a4.2 4.2 0 0 1-4.2-4L20.5 25Z" fill="#fff"/><path d="M36.5 33.5h-8v10h8M28.5 38.5h6" fill="none" stroke="#ff5a47" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function makeTextIcon(text, iconClass, hue) {
+    var icon = document.createElement("div");
+    icon.className = "appicon " + iconClass;
+    if (hue !== null && hue !== undefined) icon.style.setProperty("--hue", hue);
+    icon.textContent = text;
+    icon.setAttribute("aria-hidden", "true");
+    return icon;
+  }
+  function makeImageIcon(sources, fallbackText, iconClass, hue) {
+    var icon = makeTextIcon(fallbackText, iconClass, hue);
+    var list = (Array.isArray(sources) ? sources : [sources]).filter(Boolean);
+    if (!list.length) return icon;
+    var img = document.createElement("img");
+    img.className = "appimg";
+    img.alt = "";
+    img.setAttribute("aria-hidden", "true");
+    var stage = 0;
+    img.onerror = function () {
+      stage++;
+      if (stage < list.length) img.src = list[stage];
+      else if (img.parentNode) img.parentNode.removeChild(img);
+    };
+    img.src = list[0];
+    icon.appendChild(img);
+    return icon;
+  }
+  function makeTile(icon, name, meta) {
+    var tile = document.createElement("div");
+    tile.className = "app";
+    var n = document.createElement("div");
+    n.className = "appname";
+    n.textContent = name;
+    var m = document.createElement("div");
+    m.className = "appmeta";
+    m.textContent = meta;
+    tile.appendChild(icon);
+    tile.appendChild(n);
+    tile.appendChild(m);
+    return tile;
+  }
+  function addTileActivation(tile, fn) {
+    tile.classList.add("launchable");
+    tile.setAttribute("role", "button");
+    tile.setAttribute("tabindex", "0");
+    tile.addEventListener("click", fn);
+    tile.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn(); } });
+  }
+  function addDeleteButton(tile, item, idx) {
+    var del = document.createElement("button");
+    del.type = "button";
+    del.className = "appdel";
+    del.textContent = "×";
+    del.setAttribute("aria-label", "Remove " + item.name);
+    del.addEventListener("click", function (e) {
+      e.stopPropagation();
+      delete sessionFiles[itemKey(item)];
+      apps.splice(idx, 1);
+      save();
+      render();
+      showMsg("Removed " + item.name + " from Tweaks.", false);
+    });
+    tile.appendChild(del);
+  }
+  function makeAddTile(symbolHtml, label, meta, onClick, ariaLabel) {
+    var add = document.createElement("button");
+    add.type = "button";
+    add.className = "app addtile";
+    add.disabled = adding;
+    add.setAttribute("aria-label", ariaLabel);
+    var plus = document.createElement("div");
+    plus.className = "plus";
+    plus.innerHTML = symbolHtml;
+    plus.setAttribute("aria-hidden", "true");
+    var an = document.createElement("div");
+    an.className = "appname";
+    an.textContent = label;
+    var am = document.createElement("div");
+    am.className = "appmeta";
+    am.textContent = meta;
+    add.appendChild(plus);
+    add.appendChild(an);
+    add.appendChild(am);
+    add.addEventListener("click", onClick);
+    return add;
+  }
+
+  function guessedSchemes(item) {
+    // Tiles saved before Launcher v4 don't have their real schemes yet. A
+    // name/bundle guess (minecraft, minecraftpe, yandexmusic...) often matches
+    // the app's registered scheme, so those tiles can still try to open the
+    // installed app before the user re-reads the .ipa.
+    if (!item || item.schemesChecked) return [];
+    var generic = { music: 1, camera: 1, photos: 1, photo: 1, settings: 1, mail: 1, messages: 1, safari: 1, maps: 1, map: 1, clock: 1, weather: 1, notes: 1, note: 1, files: 1, app: 1, game: 1, mobile: 1, ios: 1, phone: 1, video: 1, videos: 1, store: 1 };
+    var out = [], seen = {};
+    function add(s) {
+      s = cleanUrlScheme(String(s || ""));
+      if (!s || seen[s] || generic[slugifyLaunch(s)]) return;
+      seen[s] = true; out.push(s);
+    }
+    var cleanName = String(item.name || "")
+      .replace(/\[[^\]]*\]/g, " ")
+      .replace(/\([^)]*\)/g, " ")
+      .replace(/\bv?\d+(?:\.\d+)+\b/gi, " ");
+    add(slugifyLaunch(cleanName));
+    var bundle = String(item.bundleId || "").toLowerCase();
+    if (bundle) {
+      add(slugifyLaunch(bundle.split(".").pop() || ""));
+      add(bundle);
+    }
+    return out.slice(0, 3);
+  }
+  function launchSchemes(item) {
+    var declared = item && Array.isArray(item.schemes) ? item.schemes : [];
+    return declared.length ? declared : guessedSchemes(item);
+  }
+  function sessionFileFor(item) { return sessionFiles[itemKey(item)] || null; }
+  function rememberSessionFile(item, file) { if (item && file) sessionFiles[itemKey(item)] = file; }
+  function setLaunchStatus(text, pct) {
+    if (launchStatus) launchStatus.textContent = text;
+    if (launchFill && typeof pct === "number") launchFill.style.width = Math.max(0, Math.min(100, pct)) + "%";
+  }
+  function launchIconNode(item) {
+    if (item.type === "store") {
+      var s = document.createElement("div");
+      s.className = "appicon store";
+      s.innerHTML = STORE_ICON.replace(/euphStoreG/g, "euphStoreLaunchG");
+      s.setAttribute("aria-hidden", "true");
+      return s;
+    }
+    if (item.icon) return makeImageIcon(item.icon, initials(item.name), "user", hueOf(item.name));
+    return makeTextIcon(initials(item.name), "user", hueOf(item.name));
+  }
+  function cleanHttpsUrl(raw) {
+    var value = String(raw || "").trim();
+    if (!value) return "";
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(value)) value = "https://" + value;
+    try {
+      var url = new URL(value);
+      if (url.protocol !== "https:" || !url.hostname) return "";
+      return url.href;
+    } catch (e) { return ""; }
+  }
+  function readOtaInputs() {
+    var ipaRaw = otaIpaInput ? otaIpaInput.value.trim() : "";
+    var manifestRaw = otaManifestInput ? otaManifestInput.value.trim() : "";
+    var ipaUrl = cleanHttpsUrl(ipaRaw), manifestUrl = cleanHttpsUrl(manifestRaw), errors = [];
+    if (ipaRaw && !ipaUrl) errors.push("The .ipa link must be a full https:// URL.");
+    if (manifestRaw && !manifestUrl) errors.push("The manifest link must be a full https:// URL.");
+    return { ipaUrl: ipaUrl, manifestUrl: manifestUrl, error: errors.join(" ") };
+  }
+  function syncOtaInstallLink(showError) {
+    var values = readOtaInputs();
+    if (otaError) otaError.textContent = showError ? values.error : (values.error || "");
+    if (otaInstallLink) {
+      var ready = !values.error && !!values.manifestUrl;
+      otaInstallLink.href = ready
+        ? "itms-services://?action=download-manifest&url=" + encodeURIComponent(values.manifestUrl)
+        : "#";
+      otaInstallLink.classList.toggle("is-disabled", !ready);
+      otaInstallLink.setAttribute("aria-disabled", ready ? "false" : "true");
+    }
+    return values;
+  }
+  function populateOtaPanel() {
+    if (!otaForm) return;
+    otaForm.hidden = true;
+    if (otaIpaInput) otaIpaInput.value = launchItem && launchItem.otaIpaUrl ? launchItem.otaIpaUrl : "";
+    if (otaManifestInput) otaManifestInput.value = launchItem && launchItem.otaManifestUrl ? launchItem.otaManifestUrl : "";
+    if (otaError) otaError.textContent = "";
+    syncOtaInstallLink(false);
+    refreshOwnCertStatus();
+  }
+  function saveOtaLinks(showStatus) {
+    if (!launchItem || launchItem.type === "store") return false;
+    var values = syncOtaInstallLink(true);
+    if (values.error) return false;
+    launchItem.otaIpaUrl = values.ipaUrl;
+    launchItem.otaManifestUrl = values.manifestUrl;
+    save();
+    syncLaunchButtons();
+    if (showStatus) setLaunchStatus(values.manifestUrl
+      ? "Install links saved. Tap “Install signed app” and iOS will check the signature, download the app and add its Home Screen icon."
+      : "Install links saved. Add the hosted manifest link to enable “Install signed app”.", 100);
+    return true;
+  }
+  function xmlEscape(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  }
+  function buildOtaManifest(item, ipaUrl) {
+    var title = xmlEscape(item.name || "App");
+    var bundleId = xmlEscape(item.bundleId || "");
+    var version = xmlEscape(item.bundleVersion || item.version || "1.0");
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n' +
+      '<plist version="1.0">\n<dict>\n  <key>items</key>\n  <array>\n    <dict>\n' +
+      '      <key>assets</key>\n      <array>\n        <dict>\n' +
+      '          <key>kind</key>\n          <string>software-package</string>\n' +
+      '          <key>url</key>\n          <string>' + xmlEscape(ipaUrl) + '</string>\n' +
+      '        </dict>\n      </array>\n' +
+      '      <key>metadata</key>\n      <dict>\n' +
+      '        <key>bundle-identifier</key>\n        <string>' + bundleId + '</string>\n' +
+      '        <key>bundle-version</key>\n        <string>' + version + '</string>\n' +
+      '        <key>kind</key>\n        <string>software</string>\n' +
+      '        <key>title</key>\n        <string>' + title + '</string>\n' +
+      '      </dict>\n    </dict>\n  </array>\n</dict>\n</plist>\n';
+  }
+  function downloadOtaManifest() {
+    if (!launchItem || launchItem.type === "store") return;
+    var values = syncOtaInstallLink(true);
+    if (values.error) return;
+    if (!values.ipaUrl) { if (otaError) otaError.textContent = "Paste the HTTPS link to the signed .ipa first."; return; }
+    if (!launchItem.bundleId) { if (otaError) otaError.textContent = "No bundle ID was read from this tile yet — choose the .ipa again so the manifest can name the right app."; return; }
+    saveOtaLinks(false);
+    var text = buildOtaManifest(launchItem, values.ipaUrl);
+    var blob = new Blob([text], { type: "application/x-plist;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    var safe = String(launchItem.bundleId || launchItem.name || "app").replace(/[^A-Za-z0-9._-]+/g, "-");
+    a.href = url;
+    a.download = safe + "-manifest.plist";
+    document.body.appendChild(a);
+    a.click();
+    if (a.parentNode) a.parentNode.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    setLaunchStatus("Manifest downloaded. Upload it next to the signed .ipa on your HTTPS host, paste its link above, then tap “Install signed app”.", 100);
+  }
+  function findAsciiBytes(bytes, text, from) {
+    outer: for (var i = from || 0; i <= bytes.length - text.length; i++) {
+      for (var j = 0; j < text.length; j++) if (bytes[i + j] !== text.charCodeAt(j)) continue outer;
+      return i;
+    }
+    return -1;
+  }
+  function parseProfileDate(value) {
+    if (value instanceof Date) return value;
+    if (typeof value === "number") return new Date((value + 978307200) * 1000); // bplist dates count from 2001-01-01
+    if (typeof value === "string") { var ms = Date.parse(value); return isNaN(ms) ? null : new Date(ms); }
+    return null;
+  }
+  function formatProfileDate(date) {
+    if (!date || isNaN(date.getTime())) return "unknown";
+    var mm = String(date.getMonth() + 1), dd = String(date.getDate());
+    return date.getFullYear() + "-" + (mm.length < 2 ? "0" + mm : mm) + "-" + (dd.length < 2 ? "0" + dd : dd);
+  }
+  function profilePatternMatches(pattern, bundleId) {
+    if (!pattern || !bundleId) return null;
+    if (pattern === "*") return true;
+    var re = new RegExp("^" + pattern.split("*").map(function (part) {
+      return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }).join(".*") + "$");
+    return re.test(bundleId);
+  }
+  function parseMobileProvision(bytes) {
+    // A .mobileprovision is a CMS envelope around an XML plist. Read only the
+    // plist part, locally; the envelope/signature itself is not verified here.
+    var start = findAsciiBytes(bytes, "<?xml", 0);
+    var end = start >= 0 ? findAsciiBytes(bytes, "</plist>", start) : -1;
+    var obj = start >= 0 && end > start ? parsePlist(bytes.slice(start, end + 8)) : parsePlist(bytes);
+    if (!obj || typeof obj !== "object") return null;
+    var entitlements = obj.Entitlements && typeof obj.Entitlements === "object" ? obj.Entitlements : {};
+    var applicationId = typeof entitlements["application-identifier"] === "string" ? entitlements["application-identifier"] : "";
+    var pattern = applicationId;
+    var firstDot = applicationId.indexOf(".");
+    if (firstDot > 0 && /^[A-Za-z0-9-]{4,}$/.test(applicationId.slice(0, firstDot))) pattern = applicationId.slice(firstDot + 1);
+    var teams = [];
+    if (Array.isArray(obj.TeamIdentifier)) teams = obj.TeamIdentifier.filter(function (x) { return typeof x === "string"; });
+    else if (typeof obj.TeamIdentifier === "string") teams = [obj.TeamIdentifier];
+    return {
+      name: typeof obj.Name === "string" ? obj.Name : "",
+      teamName: typeof obj.TeamName === "string" ? obj.TeamName : "",
+      teams: teams,
+      applicationId: applicationId,
+      pattern: pattern,
+      expires: parseProfileDate(obj.ExpirationDate),
+      allDevices: obj.ProvisionsAllDevices === true,
+      deviceCount: Array.isArray(obj.ProvisionedDevices) ? obj.ProvisionedDevices.length : null
+    };
+  }
+  function refreshOwnCertStatus() {
+    if (!ownCertStatus) return;
+    var lines = [], info = ownCert.profileInfo, expired = false, match = null;
+    if (ownCert.profileError) lines.push(ownCert.profileError);
+    else if (info) {
+      expired = !!(info.expires && info.expires.getTime() < Date.now());
+      match = launchItem ? profilePatternMatches(info.pattern, launchItem.bundleId) : null;
+      lines.push("Profile: " + (info.name || ownCert.profileFile.name) + (info.teamName ? " · " + info.teamName : ""));
+      if (info.applicationId) lines.push("App ID: " + info.applicationId);
+      lines.push("Profile expires: " + formatProfileDate(info.expires) + (expired ? " — EXPIRED" : ""));
+      lines.push("Devices: " + (info.allDevices ? "all devices (enterprise-style profile)" : info.deviceCount == null ? "not listed" : info.deviceCount + " provisioned"));
+      if (launchItem && launchItem.bundleId) lines.push("Fits " + launchItem.bundleId + ": " + (match === null ? "couldn’t tell" : match ? "yes" : "NO"));
+      else if (launchItem) lines.push("Fits this app: choose/read its .ipa again so its bundle ID is known.");
+    } else if (ownCert.profileFile) lines.push("Reading profile locally…");
+    else lines.push("No .mobileprovision selected.");
+    if (ownCert.p12File) lines.push("Certificate .p12 selected: " + ownCert.p12File.name + " (" + fmtSize(ownCert.p12File.size) + "). Its contents and password were not read, and this page cannot check that it pairs with the profile.");
+    else lines.push("No .p12 selected.");
+    if (expired) lines.push("Status: expired. Renew it with your own Apple Developer account — this site will not fetch shared certificates from the internet.");
+    else if (info && ownCert.p12File && match) lines.push("Status: profile looks usable for this app. The actual signing still has to be done by your own signer; after signing, use the signed OTA section above.");
+    else if (info && ownCert.p12File && match === false) lines.push("Status: this profile does not cover this app’s bundle ID, so a correct signer would need to change the bundle ID or use another profile.");
+    else if (info || ownCert.p12File) lines.push("Status: select both files to finish the local check. Signing itself still needs your own signing engine.");
+    ownCertStatus.textContent = lines.join("\n");
+  }
+  async function handleOwnProfile(file) {
+    ownCert.profileFile = file || null;
+    ownCert.profileInfo = null;
+    ownCert.profileError = "";
+    refreshOwnCertStatus();
+    if (!file) return;
+    if (!/\.mobileprovision$/i.test(file.name)) { ownCert.profileError = "That isn’t a .mobileprovision file."; refreshOwnCertStatus(); return; }
+    try {
+      ownCert.profileInfo = parseMobileProvision(new Uint8Array(await file.arrayBuffer()));
+      if (!ownCert.profileInfo) ownCert.profileError = "Couldn’t read a provisioning plist inside that file.";
+    } catch (e) { ownCert.profileError = "Couldn’t read that provisioning profile locally."; }
+    refreshOwnCertStatus();
+  }
+  function handleOwnP12(file) {
+    if (file && !/\.p12$/i.test(file.name)) { ownCert.p12File = null; ownCert.profileError = "That isn’t a .p12 file."; refreshOwnCertStatus(); return; }
+    // Deliberately do not read the bytes or ask for the password: this page
+    // does not perform private-key operations.
+    ownCert.p12File = file || null;
+    refreshOwnCertStatus();
+  }
+  function clearOwnCert() {
+    ownCert = { profileFile: null, profileInfo: null, profileError: "", p12File: null };
+    if (ownProfileInput) ownProfileInput.value = "";
+    if (ownP12Input) ownP12Input.value = "";
+    refreshOwnCertStatus();
+  }
+  function syncLaunchButtons() {
+    if (!launchOverlay || !launchItem) return;
+    var item = launchItem, isStore = item.type === "store";
+    var schemes = launchSchemes(item);
+    var hasFile = !!sessionFileFor(item);
+    if (launchOpenBtn) {
+      launchOpenBtn.hidden = isStore || !schemes.length;
+      launchOpenBtn.textContent = launchAttempts
+        ? (schemes.length > 1 ? "Try next open link (" + schemes[launchSchemeIndex % schemes.length] + "://)" : "Try opening installed app")
+        : "Open installed app";
+    }
+    if (launchShareBtn) launchShareBtn.hidden = isStore || !hasFile;
+    if (launchInstallBtn) {
+      launchInstallBtn.hidden = isStore;
+      launchInstallBtn.textContent = item.otaManifestUrl ? "Install to Home Screen (signed OTA)" : "Install to Home Screen…";
+    }
+    if (launchRefreshBtn) {
+      launchRefreshBtn.hidden = isStore || (hasFile && !!item.icon && item.schemesChecked);
+      launchRefreshBtn.textContent = !item.icon
+        ? "Load icon from .ipa"
+        : (!item.schemesChecked ? "Read .ipa again to find open links" : "Choose .ipa again to share/save");
+    }
+    if (launchStoreLink) {
+      var showStore = !isStore && /^\d+$/.test(String(item.appStoreId || ""));
+      launchStoreLink.hidden = !showStore;
+      if (showStore) launchStoreLink.href = "https://apps.apple.com/app/id" + item.appStoreId;
+    }
+  }
+  function removeLaunchFrame() {
+    if (launchFrame && launchFrame.parentNode) launchFrame.parentNode.removeChild(launchFrame);
+    launchFrame = null;
+  }
+  function openLaunch(item) {
+    if (!launchOverlay) { toast(item.name); return; }
+    clearTimeout(launchTimer); clearTimeout(launchFallbackTimer); removeLaunchFrame();
+    launchItem = item;
+    launchSchemeIndex = 0; launchAttempts = 0; launchLeftPage = false;
+    var isStore = item.type === "store";
+    var schemes = launchSchemes(item);
+    var guessed = !(Array.isArray(item.schemes) && item.schemes.length) && schemes.length > 0;
+    var hasFile = !!sessionFileFor(item);
+    if (launchIcon) { launchIcon.innerHTML = ""; launchIcon.appendChild(launchIconNode(item)); }
+    if (launchName) launchName.textContent = item.name;
+    if (launchMeta) {
+      launchMeta.textContent = isStore
+        ? "Package manager · built into Tweaks"
+        : (item.version ? "Version " + item.version + " · " : "") + fmtSize(item.size) + " · .ipa";
+    }
+    if (launchDetails) {
+      launchDetails.textContent = isStore
+        ? "This launch screen works offline.\nEuph Store lives in this page — there is no separate iPhone app to open."
+        : [
+            "File: " + item.file,
+            item.bundleId ? "Bundle ID: " + item.bundleId : "",
+            schemes.length ? (guessed ? "Guessed open links (choose the .ipa again to read the real list): " : "Open-in-app links: ") + schemes.map(function (s) { return s + "://"; }).join(", ") : (item.schemesChecked ? "Open-in-app links: none found in this .ipa" : "Open-in-app links: not read yet — choose the .ipa again"),
+            "File kept for Share/Save this session: " + (hasFile ? "yes" : "no — choose the .ipa again"),
+            "Signed OTA install: " + (item.otaManifestUrl ? "manifest link saved" : "not set up — a local file alone cannot be installed")
+          ].filter(Boolean).join("\n");
+    }
+    launchPrevOverflow = document.body.style.overflow || "";
+    document.body.style.overflow = "hidden";
+    launchOverlay.hidden = false;
+    syncLaunchButtons();
+    populateOtaPanel();
+    if (launchClose && launchClose.focus) { try { launchClose.focus({ preventScroll: true }); } catch (e) { launchClose.focus(); } }
+    if (isStore) {
+      setLaunchStatus("You’re already home — Euph Store’s shelf is the Tweaks folder behind this screen.", 100);
+      return;
+    }
+    if (schemes.length) {
+      setLaunchStatus(guessed ? "Opening " + item.name + " with a guessed link from its name — choose the .ipa again later to read the real links." : "Opening " + item.name + "…", 35);
+      launchTimer = setTimeout(function () { attemptLaunch(false); }, 350);
+    } else if (!item.schemesChecked) {
+      setLaunchStatus("This tile was added before the launcher update, so its open-in-app links haven’t been read yet. Choose the same .ipa once — the tile updates in place.", 100);
+    } else {
+      setLaunchStatus("No open-in-app link was found inside this .ipa, so a web page can’t launch it directly. If " + item.name + " is installed, open it from the Home Screen — or use Share/Save below.", 100);
+    }
+  }
+  function openStoreLaunch() { openLaunch({ type: "store", name: "Euph Store" }); }
+  function closeLaunch() {
+    clearTimeout(launchTimer); clearTimeout(launchFallbackTimer); removeLaunchFrame();
+    if (launchOverlay) launchOverlay.hidden = true;
+    document.body.style.overflow = launchPrevOverflow || "";
+    launchItem = null;
+  }
+  function attemptLaunch(direct) {
+    var item = launchItem;
+    if (!item || item.type === "store") return;
+    var schemes = launchSchemes(item);
+    if (!schemes.length) return;
+    var scheme = schemes[launchSchemeIndex % schemes.length];
+    var url = scheme + "://";
+    launchAttempts++;
+    launchLeftPage = false;
+    setLaunchStatus("Trying " + url + " — if iOS asks, tap “Open”.", 55);
+    clearTimeout(launchFallbackTimer);
+    removeLaunchFrame();
+    try {
+      if (direct) {
+        window.location.href = url;
+      } else {
+        var frame = document.createElement("iframe");
+        frame.style.display = "none";
+        frame.setAttribute("aria-hidden", "true");
+        launchFrame = frame;
+        document.body.appendChild(frame);
+        frame.src = url;
+      }
+    } catch (e) { /* the fallback timer below reports the result */ }
+    launchFallbackTimer = setTimeout(function () {
+      removeLaunchFrame();
+      if (!launchItem || !launchOverlay || launchOverlay.hidden) return;
+      if (launchLeftPage || document.hidden) { setLaunchStatus("Opening in the installed app…", 100); return; }
+      if (schemes.length > 1) launchSchemeIndex = (launchSchemeIndex + 1) % schemes.length;
+      syncLaunchButtons();
+      setLaunchStatus("Didn’t switch apps. " + item.name + " may not be installed on this iPhone, this viewer may block app links, or " + url + " isn’t a launcher link. You can try again, or Share/Save the .ipa below.", 100);
+    }, direct ? 1700 : 1500);
+  }
+  function downloadSessionFile(file) {
+    var url = URL.createObjectURL(file);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = file.name || "app.ipa";
+    document.body.appendChild(a);
+    a.click();
+    if (a.parentNode) a.parentNode.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    setLaunchStatus("Save started. Open the saved .ipa with an installer you already use — this page can’t install or run it itself.", 100);
+  }
+  async function shareLaunchFile() {
+    var item = launchItem;
+    var file = item ? sessionFileFor(item) : null;
+    if (!file) { refreshLaunchFile(); return; }
+    var canFiles = false;
+    try { canFiles = !!(navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))); } catch (e) { canFiles = false; }
+    if (!canFiles) { downloadSessionFile(file); return; }
+    try {
+      await navigator.share({ files: [file], title: item.name });
+      setLaunchStatus("Shared. If you sent the .ipa to an installer, finish opening/installing it there.", 100);
+    } catch (e) {
+      if (e && e.name === "AbortError") setLaunchStatus("Share cancelled — the launch screen stays here for you.", 100);
+      else downloadSessionFile(file);
+    }
+  }
+  function refreshLaunchFile() {
+    var item = launchItem;
+    if (!item) return;
+    var fileName = item.file || (item.name + ".ipa");
+    closeLaunch();
+    showMsg("Choose “" + fileName + "” again — its icon, version and open-in-app links will be loaded into this tile (no duplicate is made).", false);
+    input.click();
+  }
+  function isDownloadWebclipUrl(urlHref) {
+    try {
+      var path = new URL(urlHref).pathname.toLowerCase();
+      return /\.(mobileconfig|ipa|deb|zip|dmg|pkg|apk)$/.test(path);
+    } catch (e) { return false; }
+  }
+  function setWebclipStatus(text) { if (webclipStatusText) webclipStatusText.textContent = text; }
+  function webclipIconNode(item) {
+    return makeImageIcon(webIconSources(item.url), initials(item.name), "web", hueOf(item.name));
+  }
+  function openWebclip(item) {
+    var url = cleanWebclipUrl(item && item.url);
+    if (!url) { showMsg("That webclip link isn’t valid anymore — delete it and add the link again.", true); return; }
+    if (!webclipOverlay || !webclipFrame) { window.open(url, "_blank", "noopener,noreferrer"); return; }
+    clearTimeout(webclipLoadTimer);
+    webclipItem = { type: "webclip", name: item.name || defaultWebclipName(url), url: url };
+    var host = hostOf(url);
+    var isDownload = isDownloadWebclipUrl(url);
+    var isProfile = /\.mobileconfig$/i.test(url.split(/[?#]/)[0]);
+    if (webclipViewIcon) { webclipViewIcon.innerHTML = ""; webclipViewIcon.appendChild(webclipIconNode(webclipItem)); }
+    if (webclipViewName) webclipViewName.textContent = webclipItem.name;
+    if (webclipViewHost) webclipViewHost.textContent = host + " · Webclip";
+    if (webclipExternal) webclipExternal.href = url;
+    if (webclipThisTab) webclipThisTab.href = url;
+    if (webclipDownloadLink) { webclipDownloadLink.href = url; webclipDownloadLink.textContent = isProfile ? "Open profile link" : "Open / download link"; }
+    if (webclipDownloadBrowser) webclipDownloadBrowser.href = url;
+    if (webclipDownloadIcon) { webclipDownloadIcon.innerHTML = ""; webclipDownloadIcon.appendChild(webclipIconNode(webclipItem)); }
+    if (webclipDownloadTitle) webclipDownloadTitle.textContent = webclipItem.name;
+    if (webclipDownloadText) {
+      webclipDownloadText.textContent = isProfile
+        ? "This link points to an iOS profile (.mobileconfig), so it can’t be displayed as a page inside Tweaks. Tap “Open profile link” and let iOS/Safari handle it. Only install profiles from sources you trust."
+        : "This link points to a downloadable file, so it can’t be displayed as a page inside Tweaks. Tap “Open / download link” to let the browser handle the file.";
+    }
+    webclipPrevOverflow = document.body.style.overflow || "";
+    document.body.style.overflow = "hidden";
+    webclipOverlay.hidden = false;
+    if (webclipBack && webclipBack.focus) { try { webclipBack.focus({ preventScroll: true }); } catch (e) { webclipBack.focus(); } }
+    if (isDownload) {
+      webclipFrame.hidden = true;
+      try { webclipFrame.src = "about:blank"; } catch (e) {}
+      if (webclipDownload) webclipDownload.hidden = false;
+      setWebclipStatus(isProfile ? "Profile link — use “Open profile link” below." : "File link — use “Open / download link” below.");
+      return;
+    }
+    if (webclipDownload) webclipDownload.hidden = true;
+    webclipFrame.hidden = false;
+    var mixed = false;
+    try { mixed = window.location.protocol === "https:" && new URL(url).protocol === "http:"; } catch (e) {}
+    if (navigator.onLine === false) setWebclipStatus("You appear to be offline — this can only show what the browser/site has cached. ");
+    else if (mixed) setWebclipStatus("This is an http:// link; a secure copy of this page may block it inside the window. Use ↗ or ");
+    else setWebclipStatus("Loading inside Tweaks… If this stays blank, the site blocks in-page opening — use ↗ or ");
+    try { webclipFrame.src = "about:blank"; } catch (e) {}
+    var opening = webclipItem;
+    webclipLoadTimer = setTimeout(function () {
+      if (webclipItem === opening && !webclipOverlay.hidden) webclipFrame.src = url;
+    }, 30);
+  }
+  function closeWebclip() {
+    clearTimeout(webclipLoadTimer);
+    webclipItem = null;
+    if (webclipOverlay) webclipOverlay.hidden = true;
+    if (webclipFrame) { try { webclipFrame.src = "about:blank"; } catch (e) {} }
+    document.body.style.overflow = webclipPrevOverflow || "";
+  }
+  function reloadWebclip() {
+    if (!webclipItem || !webclipFrame || webclipFrame.hidden) return;
+    setWebclipStatus("Reloading… If this stays blank, use ↗ or ");
+    try {
+      if (webclipFrame.contentWindow && webclipFrame.contentWindow.location) {
+        webclipFrame.contentWindow.location.reload();
+        return;
+      }
+    } catch (e) { /* cross-origin: reload by resetting src below */ }
+    var url = webclipItem.url, opening = webclipItem;
+    try { webclipFrame.src = "about:blank"; } catch (e) {}
+    clearTimeout(webclipLoadTimer);
+    webclipLoadTimer = setTimeout(function () {
+      if (webclipItem === opening && webclipOverlay && !webclipOverlay.hidden) webclipFrame.src = url;
+    }, 30);
+  }
+  function render() {
+    grid.innerHTML = "";
+    sub.hidden = !jailbroken;
+    hint.hidden = !jailbroken;
+    resetBtn.hidden = !jailbroken;
+    if (!jailbroken) {
+      msg.hidden = true;
+      if (webForm) webForm.hidden = true;
+      if (launchItem) closeLaunch();
+      if (webclipItem) closeWebclip();
+      return; // before jailbreak: Tweaks is empty
+    }
+
+    var storeIcon = document.createElement("div");
+    storeIcon.className = "appicon store";
+    storeIcon.innerHTML = STORE_ICON;
+    storeIcon.setAttribute("aria-hidden", "true");
+    var store = makeTile(storeIcon, "Euph Store", "Package manager");
+    store.classList.add("store-app");
+    store.title = "Open Euph Store";
+    addTileActivation(store, openStoreLaunch);
+    grid.appendChild(store);
+
+    apps.forEach(function (a, idx) {
+      var tile;
+      if (a.type === "webclip") {
+        tile = makeTile(makeImageIcon(webIconSources(a.url), initials(a.name), "web", hueOf(a.name)), a.name, hostOf(a.url) + " · Webclip · tap to open");
+        tile.classList.add("webclip-app");
+        tile.title = "Open " + a.name + " — " + a.url;
+        addTileActivation(tile, function () { openWebclip(a); });
+      } else {
+        var tileIcon = a.icon
+          ? makeImageIcon(a.icon, initials(a.name), "user", hueOf(a.name))
+          : makeTextIcon(initials(a.name), "user", hueOf(a.name));
+        tile = makeTile(tileIcon, a.name, fmtSize(a.size) + " · .ipa · tap to open");
+        if (!a.icon) tile.classList.add("needs-icon");
+        tile.title = "Open " + a.name;
+        addTileActivation(tile, function () { openLaunch(a); });
+      }
+      addDeleteButton(tile, a, idx);
+      grid.appendChild(tile);
+    });
+
+    grid.appendChild(makeAddTile("+", adding ? "Reading…" : "Add app", ".ipa only · icon included", function () { input.click(); }, "Add app — .ipa files only, icon is pulled from the file"));
+    grid.appendChild(makeAddTile(
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.54 3.54 0 1 0-5-5l-1.7 1.7"/><path d="M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.54 3.54 0 1 0 5 5l1.7-1.7"/></svg>',
+      "Add webclip", "Paste a link", function () {
+        if (!webForm) return;
+        webForm.hidden = !webForm.hidden;
+        if (!webForm.hidden && webUrl) webUrl.focus();
+      }, "Add webclip — paste a link"));
+  }
+
+  async function addFiles(list) {
+    if (!jailbroken || adding || !list || !list.length) return;
+    adding = true;
+    render();
+    showMsg("Reading .ipa file(s) — pulling out each app's real name, icon and open-in-app links…", false);
+    var added = [], updated = [], rejected = [], noIcon = [], problems = [];
+    var files = Array.prototype.slice.call(list);
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!/\.ipa$/i.test(f.name) || f.name.length <= 4) { rejected.push(f.name); continue; }
+      var meta = await parseIpa(f);
+      var item = { type: "ipa", name: meta.name || prettyName(f.name), file: f.name, size: f.size || 0, icon: meta.icon || "", bundleId: meta.bundleId || "", schemes: Array.isArray(meta.schemes) ? meta.schemes : [], schemesChecked: meta.schemesChecked === true, version: meta.version || "", bundleVersion: meta.bundleVersion || "", appStoreId: meta.appStoreId || "", otaIpaUrl: "", otaManifestUrl: "" };
+      var existing = -1;
+      for (var j = 0; j < apps.length; j++) {
+        var other = apps[j];
+        if (other.type !== "ipa") continue;
+        if ((item.bundleId && other.bundleId === item.bundleId) || other.file.toLowerCase() === f.name.toLowerCase()) { existing = j; break; }
+      }
+      if (existing >= 0) {
+        if (!item.icon && apps[existing].icon) item.icon = apps[existing].icon;
+        if (!item.bundleId && apps[existing].bundleId) item.bundleId = apps[existing].bundleId;
+        if (!item.schemes.length && Array.isArray(apps[existing].schemes)) item.schemes = apps[existing].schemes;
+        if (!item.schemesChecked && apps[existing].schemesChecked) item.schemesChecked = true;
+        if (!item.version && apps[existing].version) item.version = apps[existing].version;
+        if (!item.bundleVersion && apps[existing].bundleVersion) item.bundleVersion = apps[existing].bundleVersion;
+        if (!item.appStoreId && apps[existing].appStoreId) item.appStoreId = apps[existing].appStoreId;
+        if (apps[existing].otaIpaUrl) item.otaIpaUrl = apps[existing].otaIpaUrl;
+        if (apps[existing].otaManifestUrl) item.otaManifestUrl = apps[existing].otaManifestUrl;
+        apps[existing] = item; updated.push(item.name);
+      } else { apps.push(item); added.push(item.name); }
+      rememberSessionFile(item, f);
+      if (meta.problem) problems.push(item.name + ": " + meta.problem);
+      else if (!item.icon) noIcon.push(item.name);
+    }
+    adding = false;
+    save();
+    render();
+    var parts = [];
+    if (added.length) parts.push("Added to Tweaks: " + added.join(", ") + ". Tap an app to try opening it.");
+    if (updated.length) parts.push("Updated: " + updated.join(", ") + ".");
+    if (problems.length) parts.push("Could not unpack " + problems.join("; ") + " — added with a letter icon for now.");
+    if (noIcon.length) parts.push("No readable icon found inside " + noIcon.join(", ") + " (it may be packed inside Assets.car in a format this page can't open), so a letter icon is shown instead.");
+    if (rejected.length) parts.push("Rejected — only .ipa files can be added as apps: " + rejected.join(", ") + ".");
+    if (parts.length) showMsg(parts.join(" "), rejected.length > 0 || problems.length > 0);
+  }
+
+  input.addEventListener("change", function () {
+    // Keep the picked files alive while they are being read: on iOS, clearing
+    // the input first can revoke access to the files before the (async) icon
+    // extraction gets to them, which left apps with letter icons.
+    var files = Array.prototype.slice.call(input.files || []);
+    var clear = function () { input.value = ""; };
+    Promise.resolve(addFiles(files)).then(clear, clear);
+  });
+  if (webForm) {
+    webForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (addWebclip(webUrl ? webUrl.value : "", webName ? webName.value : "")) {
+        webForm.reset();
+        webForm.hidden = true;
+      }
+    });
+  }
+  if (webCancel && webForm) webCancel.addEventListener("click", function () { webForm.hidden = true; });
+  if (launchClose) launchClose.addEventListener("click", closeLaunch);
+  if (launchDoneBtn) launchDoneBtn.addEventListener("click", closeLaunch);
+  if (launchOpenBtn) launchOpenBtn.addEventListener("click", function () { attemptLaunch(true); });
+  if (launchShareBtn) launchShareBtn.addEventListener("click", shareLaunchFile);
+  if (launchRefreshBtn) launchRefreshBtn.addEventListener("click", refreshLaunchFile);
+  if (launchInstallBtn) launchInstallBtn.addEventListener("click", function () {
+    if (!otaForm) return;
+    otaForm.hidden = !otaForm.hidden;
+    syncOtaInstallLink(false);
+    if (!otaForm.hidden) {
+      setLaunchStatus("Signed OTA is the only browser-triggered install iOS allows. A local or unsigned .ipa will not install from this page.", 100);
+      var first = otaManifestInput && otaManifestInput.value ? otaManifestInput : otaIpaInput;
+      if (first && first.focus) { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }
+      var card = launchOverlay.querySelector(".launchcard");
+      if (card) card.scrollTop = card.scrollHeight;
+    }
+  });
+  if (otaForm) otaForm.addEventListener("submit", function (e) { e.preventDefault(); saveOtaLinks(true); });
+  if (otaIpaInput) otaIpaInput.addEventListener("input", function () { syncOtaInstallLink(false); });
+  if (otaManifestInput) otaManifestInput.addEventListener("input", function () { syncOtaInstallLink(false); });
+  if (otaDownloadBtn) otaDownloadBtn.addEventListener("click", downloadOtaManifest);
+  if (ownProfileInput) ownProfileInput.addEventListener("change", function () { handleOwnProfile(ownProfileInput.files && ownProfileInput.files[0]); });
+  if (ownP12Input) ownP12Input.addEventListener("change", function () { handleOwnP12(ownP12Input.files && ownP12Input.files[0]); });
+  if (ownCertClearBtn) ownCertClearBtn.addEventListener("click", clearOwnCert);
+  if (otaInstallLink) otaInstallLink.addEventListener("click", function (e) {
+    var values = syncOtaInstallLink(true);
+    if (values.error || !values.manifestUrl) {
+      e.preventDefault();
+      if (otaError && !values.error) otaError.textContent = "Paste the hosted HTTPS manifest .plist link first. The .ipa link alone cannot start an OTA install.";
+      return;
+    }
+    saveOtaLinks(false);
+    setLaunchStatus("Handing the signed install to iOS. If its certificate/provisioning profile does not cover this iPhone, iOS will reject it.", 100);
+  });
+  if (launchOverlay) launchOverlay.addEventListener("click", function (e) {
+    if (e.target === launchOverlay || (e.target.classList && e.target.classList.contains("launchscrim"))) closeLaunch();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && launchOverlay && !launchOverlay.hidden) closeLaunch();
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) launchLeftPage = true;
+    else if (launchItem && launchLeftPage && launchOverlay && !launchOverlay.hidden) {
+      setLaunchStatus(launchItem.name + " opened outside this page. You’re back in Tweaks.", 100);
+    }
+  });
+  window.addEventListener("pagehide", function () { launchLeftPage = true; });
+  if (webclipBack) webclipBack.addEventListener("click", closeWebclip);
+  if (webclipCloseBtn) webclipCloseBtn.addEventListener("click", closeWebclip);
+  if (webclipReloadBtn) webclipReloadBtn.addEventListener("click", reloadWebclip);
+  if (webclipOverlay) webclipOverlay.addEventListener("click", function (e) { if (e.target === webclipOverlay) closeWebclip(); });
+  if (webclipFrame) webclipFrame.addEventListener("load", function () {
+    if (!webclipItem || !webclipOverlay || webclipOverlay.hidden || webclipFrame.hidden) return;
+    var src = webclipFrame.getAttribute("src") || "";
+    if (src && src !== "about:blank") setWebclipStatus("Loaded. If the window is blank, this site blocks in-page opening — use ↗ or ");
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && webclipOverlay && !webclipOverlay.hidden) closeWebclip();
+  });
+  folder.addEventListener("dragover", function (e) {
+    if (!jailbroken) return;
+    e.preventDefault();
+    folder.classList.add("drag");
+  });
+  folder.addEventListener("dragleave", function () { folder.classList.remove("drag"); });
+  folder.addEventListener("drop", function (e) {
+    if (!jailbroken) return;
+    e.preventDefault();
+    folder.classList.remove("drag");
+    if (!e.dataTransfer) return;
+    if (e.dataTransfer.files && e.dataTransfer.files.length) { addFiles(e.dataTransfer.files); return; }
+    var link = "";
+    try { link = e.dataTransfer.getData("text/uri-list") || e.dataTransfer.getData("text/plain") || ""; } catch (err) { link = ""; }
+    link = String(link).split(/\r?\n/).map(function (s) { return s.trim(); }).filter(function (s) { return s && s.charAt(0) !== "#"; })[0] || "";
+    if (link) addWebclip(link, "");
+  });
+  resetBtn.addEventListener("click", function () {
+    closeLaunch();
+    closeWebclip();
+    clearOwnCert();
+    sessionFiles = {};
+    jailbroken = false;
+    apps = [];
+    save();
+    render();
+    toast("Jailbreak removed. Tweaks is empty again.");
+  });
+
+  // Called by the install flow when a jailbreak run succeeds.
+  window.EuphUnlockTweaks = function (announce) {
+    if (!jailbroken) justUnlocked = true;
+    jailbroken = true;
+    save();
+    render();
+    if (announce) {
+      toast(justUnlocked ? "Jailbreak complete — Euph Store was added to Tweaks." : "Euph Store is in Tweaks.");
+      justUnlocked = false;
+    }
+  };
+
+  load();
+  render();
+})();
+</script>
+
+</body></html>
